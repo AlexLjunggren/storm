@@ -3,7 +3,7 @@
 Interface
 
 ```java
-    @Connection(context = "H2")
+    @Database(context = "H2")
     private interface UserRepository {
         
         @Select(sql = "select * from users")
@@ -16,6 +16,22 @@ Interface
         public List<String> fullNames();
 
     }
+```
+
+Context
+
+- src/main/resources/context.json
+
+```json
+    [
+        {
+            "name" : "H2",
+            "driver" : "org.h2.Driver",
+            "url" : "jdbc:h2:mem:test;DB_CLOSE_DELAY=-1",
+            "username" : "",
+            "password" : ""
+        }
+    ]
 ```
 
 Use

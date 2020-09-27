@@ -7,8 +7,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import com.ljunggren.storm.Context;
 import com.ljunggren.storm.annotation.Select;
+import com.ljunggren.storm.context.Context;
 import com.ljunggren.storm.mapper.ResultSetMapper;
 
 public class SelectQuery extends QueryChain {

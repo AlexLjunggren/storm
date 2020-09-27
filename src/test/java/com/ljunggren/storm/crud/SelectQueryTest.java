@@ -6,24 +6,25 @@ import static org.junit.Assert.assertTrue;
 
 import java.sql.Statement;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.io.IOUtils;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.ljunggren.storm.Context;
 import com.ljunggren.storm.StormRepository;
 import com.ljunggren.storm.TestUser;
-import com.ljunggren.storm.annotation.Connection;
+import com.ljunggren.storm.annotation.Database;
 import com.ljunggren.storm.annotation.Select;
+import com.ljunggren.storm.context.Context;
 
 public class SelectQueryTest {
 
-    @Connection(context = "H2")
+    @Database(context = "H2")
     private interface UserRepository {
         
         @Select(sql = "select * from users order by id")
-        public TestUser[] fetchAll();
+        public TestUser[] fetchAllOrdered();
         
         @Select(sql = "select * from users where id = ?")
         public TestUser findById(int id);
@@ -37,6 +38,8 @@ public class SelectQueryTest {
         @Select(sql = "select firstname || ' ' || lastname from users")
         public List<String> fullNames();
 
+        @Select(sql = "select * from users")
+        public Set<TestUser> fetchAll();
     }
 
     @Before
@@ -46,14 +49,14 @@ public class SelectQueryTest {
                 .driver("org.h2.Driver")
                 .build();
         Statement stat = context.getConnection().createStatement();
-        String sql = IOUtils.toString(this.getClass().getResourceAsStream("CREATE_DB.sql"), "UTF-8");
+        String sql = IOUtils.toString(getClass().getClassLoader().getResourceAsStream("com/ljunggren/storm/CREATE_DB.sql"), "UTF-8");
         stat.execute(sql);
     }
 
     @Test
-    public void fetchAllTest() throws Exception {
+    public void fetchAllOrderedTest() throws Exception {
         UserRepository repository = StormRepository.newInstance(UserRepository.class);
-        TestUser[] users = repository.fetchAll();
+        TestUser[] users = repository.fetchAllOrdered();
         assertTrue(users.length > 0);
     }
 
@@ -95,6 +98,13 @@ public class SelectQueryTest {
         List<String> fullNames = repository.fullNames();
         assertEquals("Alex Ljunggren", fullNames.get(0));
         assertEquals("Christie Ljunggren", fullNames.get(1));
+    }
+
+    @Test
+    public void fetchAllTest() throws Exception {
+        UserRepository repository = StormRepository.newInstance(UserRepository.class);
+        Set<TestUser> users = repository.fetchAll();
+        assertTrue(users.size() > 0);
     }
 
 }

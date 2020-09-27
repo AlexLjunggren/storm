@@ -28,8 +28,9 @@ public class ResultSetMapper {
                 new ObjectMapper().nextChain(
                 new ArrayMapper().nextChain(
                 new ListMapper().nextChain(
+                new SetMapper().nextChain(
                 new CatchAllMapper()
-                        ))));
+                        )))));
     }
     
 }

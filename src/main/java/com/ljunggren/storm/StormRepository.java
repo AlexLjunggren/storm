@@ -6,8 +6,11 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.lang.reflect.Type;
 import java.util.Arrays;
+import java.util.Iterator;
 
-import com.ljunggren.storm.annotation.Connection;
+import com.ljunggren.storm.annotation.Database;
+import com.ljunggren.storm.context.Context;
+import com.ljunggren.storm.context.ContextFactory;
 import com.ljunggren.storm.crud.QueryChain;
 import com.ljunggren.storm.crud.SelectQuery;
 
@@ -28,31 +31,34 @@ public class StormRepository implements InvocationHandler {
     
     private Context getContextFromClass(Class<?> clazz) {
         Annotation[] annotations = clazz.getAnnotations();
-        Connection connection = (Connection) Arrays.stream(annotations)
-                .filter(annotation -> annotation.annotationType() == Connection.class)
+        Database connection = (Database) Arrays.stream(annotations)
+                .filter(annotation -> annotation.annotationType() == Database.class)
                 .findFirst()
                 .orElse(null);
         return createContext(connection);
     }
     
-    private Context createContext(Connection connection) {
+    private Context createContext(Database connection) {
         if (connection == null) {
             return null;
         }
         String name = connection.context();
-        return Context.builder()
-                .name(name)
-                .url("jdbc:h2:mem:test;DB_CLOSE_DELAY=-1")
-                .driver("org.h2.Driver")
-                .build();
+        return new ContextFactory().getContext(name);
     }
 
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-        Annotation[] methodAnnotations = method.getAnnotations();
+        Iterator<Annotation> annotations = Arrays.stream(method.getAnnotations()).iterator();
         Type returnType = method.getGenericReturnType();
-        QueryChain queryChain = getQueryChain();
-        return queryChain.execute(methodAnnotations[0], context, args, returnType);
+        return execute(annotations, args, returnType);
+    }
+    
+    private Object execute(Iterator<Annotation> annotations, Object[] args, Type returnType) {
+        if (annotations.hasNext()) {
+            Object object = getQueryChain().execute(annotations.next(), context, args, returnType);
+            return object == null ? execute(annotations, args, returnType) : object;
+        }
+        return null;
     }
     
     private QueryChain getQueryChain() {

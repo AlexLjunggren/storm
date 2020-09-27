@@ -23,6 +23,7 @@ public class ReflectionUtilsTest {
     boolean primitiveBoolean;
     Boolean objectBoolean;
     String string;
+    Set<Integer> intergerSet;
 
     @Test
     public void getOwnerTypeNullTest() {
@@ -179,6 +180,20 @@ public class ReflectionUtilsTest {
         Field field = ReflectionUtilsTest.class.getDeclaredField("objectBoolean");
         Type fieldType = field.getGenericType();
         assertFalse(ReflectionUtils.isString(fieldType));
+    }
+    
+    @Test
+    public void isSetTest() throws NoSuchFieldException, SecurityException {
+        Field field = ReflectionUtilsTest.class.getDeclaredField("integerSet");
+        Type fieldType = field.getGenericType();
+        assertTrue(ReflectionUtils.isSet(fieldType));
+    }
+    
+    @Test
+    public void isSetFalseTest() throws NoSuchFieldException, SecurityException {
+        Field field = ReflectionUtilsTest.class.getDeclaredField("stringList");
+        Type fieldType = field.getGenericType();
+        assertFalse(ReflectionUtils.isSet(fieldType));
     }
     
 }

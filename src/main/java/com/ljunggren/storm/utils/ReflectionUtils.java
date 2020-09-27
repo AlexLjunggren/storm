@@ -5,6 +5,7 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.lang3.ClassUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
@@ -66,6 +67,13 @@ public class ReflectionUtils {
             return false;
         }
         return ((Class<?>) type).isArray();
+    }
+    
+    public static boolean isSet(Type type) {
+        if (isParameterized(type)) {
+            return getOwnerType(type).getTypeName().equals(Set.class.getName());
+        }
+        return false;
     }
     
 }

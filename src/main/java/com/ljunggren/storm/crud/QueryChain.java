@@ -3,7 +3,7 @@ package com.ljunggren.storm.crud;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 
-import com.ljunggren.storm.Context;
+import com.ljunggren.storm.context.Context;
 
 public abstract class QueryChain {
 
