@@ -44,6 +44,14 @@ public class ReflectionUtils {
         return ClassUtils.isPrimitiveOrWrapper((Class<?>) type);
     }
     
+    public static boolean isInteger(Type type) {
+        if (isPrimitive(type)) {
+            return type.getTypeName().equals(Integer.class.getName()) ||
+                    type.getTypeName().equals(int.class.getName());
+        }
+        return false;
+    }
+    
     public static boolean isParameterized(Type type) {
         return type instanceof ParameterizedType;
     }

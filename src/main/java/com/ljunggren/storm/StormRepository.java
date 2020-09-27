@@ -11,6 +11,7 @@ import java.util.Iterator;
 import com.ljunggren.storm.annotation.Database;
 import com.ljunggren.storm.context.Context;
 import com.ljunggren.storm.context.ContextFactory;
+import com.ljunggren.storm.crud.DeleteQuery;
 import com.ljunggren.storm.crud.QueryChain;
 import com.ljunggren.storm.crud.SelectQuery;
 
@@ -62,7 +63,8 @@ public class StormRepository implements InvocationHandler {
     }
     
     private QueryChain getQueryChain() {
-        return new SelectQuery();
+        return new SelectQuery().nextChain(
+                new DeleteQuery());
     }
     
 }

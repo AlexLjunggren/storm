@@ -17,6 +17,7 @@ import com.ljunggren.storm.TestUser;
 import com.ljunggren.storm.annotation.Database;
 import com.ljunggren.storm.annotation.Select;
 import com.ljunggren.storm.context.Context;
+import com.ljunggren.storm.context.ContextFactory;
 
 public class SelectQueryTest {
 
@@ -44,10 +45,7 @@ public class SelectQueryTest {
 
     @Before
     public void setup() throws Exception {
-        Context context = Context.builder()
-                .url("jdbc:h2:mem:test;DB_CLOSE_DELAY=-1")
-                .driver("org.h2.Driver")
-                .build();
+        Context context = new ContextFactory().getContext("H2");
         Statement stat = context.getConnection().createStatement();
         String sql = IOUtils.toString(getClass().getClassLoader().getResourceAsStream("com/ljunggren/storm/CREATE_DB.sql"), "UTF-8");
         stat.execute(sql);

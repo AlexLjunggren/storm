@@ -18,7 +18,7 @@ public class PrimitiveMapper extends MapperChain {
     }
     
     private Object map(ResultSet resultSet, Class<?> clazz) throws SQLException {
-        return resultSet.next() ? getColumnValue(resultSet, 1) : instantiateObject(clazz);
+        return resultSet.next() ? mapToObject(resultSet, clazz, null) : instantiateObject(clazz);
     }
-
+    
 }

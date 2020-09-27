@@ -1,23 +1,5 @@
 ## Storm - Object-Relational Mapper ##
 
-Interface
-
-```java
-    @Database(context = "H2")
-    private interface UserRepository {
-        
-        @Select(sql = "select * from users")
-        public List<User> fetchAll();
-        
-        @Select(sql = "select * from users where id = ?")
-        public User findById(int id);
-        
-        @Select(sql = "select firstname || ' ' || lastname from users")
-        public List<String> fullNames();
-
-    }
-```
-
 Context
 
 - src/main/resources/context.json
@@ -34,15 +16,26 @@ Context
     ]
 ```
 
+Interface
+
+```java
+    @Database(context = "H2")
+    private interface UserRepository {
+        
+        @Select(sql = "select * from users")
+        public List<User> fetchAll();
+        
+        @Delete(sql = "delete from users where id = ?")
+        public int delete(int id);
+        
+    }
+```
+
 Use
 
 ```java
     UserRepository repository = StormRepository.newInstance(UserRepository.class);
-    
     List<User> users = repository.fetchAll();
-    User user = repository.findById(12);
-    List<String> fullNames = repository.fullNames();
-
 ```
 
 Mapping

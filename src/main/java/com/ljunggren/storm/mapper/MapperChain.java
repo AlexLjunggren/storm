@@ -44,12 +44,14 @@ public abstract class MapperChain {
     }
     
     protected Object mapToObject(ResultSet resultSet, Class<?> clazz, List<Field> fields) {
+        if (ReflectionUtils.isPrimitive(clazz) || ReflectionUtils.isString(clazz)) {
+            return mapToPrimitive(resultSet);
+        }
         Object object = instantiateObject(clazz);
-        return (ReflectionUtils.isPrimitive(clazz) || ReflectionUtils.isString(clazz)) ?
-            mapToPrimitive(resultSet, object) : mapToObject(resultSet, object, fields);
+        return mapToObject(resultSet, object, fields);
     }
     
-    private Object mapToPrimitive(ResultSet resultSet, Object object) {
+    private Object mapToPrimitive(ResultSet resultSet) {
         return getColumnValue(resultSet, 1);
     }
 
