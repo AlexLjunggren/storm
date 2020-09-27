@@ -6,7 +6,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Type;
 import java.sql.SQLException;
 
-import org.junit.Before;
 import org.junit.Test;
 
 import com.ljunggren.storm.TestUser;
@@ -15,21 +14,19 @@ import com.mockrunner.mock.jdbc.MockResultSet;
 public class ArrayMapperTest {
 
     TestUser[] users;
+    String[] names;
     
     private MockResultSet resultSet;
     private MapperChain mapper = new ArrayMapper();
 
-    @Before
-    public void setup() throws SQLException {
+    @Test
+    public void mapTest() throws NoSuchFieldException, SecurityException, SQLException {
         resultSet = new MockResultSet("mock");
         resultSet.addColumn("ID", new Integer[] {1, 2});
         resultSet.addColumn("FIRSTNAME", new String[] {"Alex", "Christie"});
         resultSet.addColumn("LASTNAME", new String[] {"Ljunggren", "Ljunggren"});
         resultSet.addColumn("EMPLOYEEID", new Integer[] {100, 101});
-    }
-    
-    @Test
-    public void mapTest() throws NoSuchFieldException, SecurityException, SQLException {
+ 
         Field field = this.getClass().getDeclaredField("users");
         Type returnType = field.getGenericType();
         TestUser[] users = (TestUser[]) mapper.map(resultSet, returnType);
@@ -44,6 +41,19 @@ public class ArrayMapperTest {
         assertEquals("Christie", christie.getFirstName());
         assertEquals("Ljunggren", christie.getLastName());
         assertEquals(101, christie.getEmployeeID());
+    }
+    
+    @Test
+    public void mapPrimitiveTest() throws NoSuchFieldException, SecurityException, SQLException {
+        resultSet = new MockResultSet("mock");
+        resultSet.addColumn("FIRSTNAME", new String[] {"Alex", "Christie"});
+        
+        Field field = this.getClass().getDeclaredField("names");
+        Type returnType = field.getGenericType();
+        String[] names = (String[]) mapper.map(resultSet, returnType);
+        
+        assertEquals("Alex", names[0]);
+        assertEquals("Christie", names[1]);
     }
     
 }

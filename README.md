@@ -25,5 +25,13 @@ Use
     
     List<User> users = repository.fetchAll();
     User user = repository.findById(12);
+    List<String> fullNames = repository.fullNames();
 
+```
+
+Mapping
+
+```java
+    @ColumnProperty(name = "employee_id")
+    private int employeeID;
 ```
