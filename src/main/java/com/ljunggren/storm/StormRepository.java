@@ -14,6 +14,7 @@ import com.ljunggren.storm.context.ContextFactory;
 import com.ljunggren.storm.crud.DeleteQuery;
 import com.ljunggren.storm.crud.QueryChain;
 import com.ljunggren.storm.crud.SelectQuery;
+import com.ljunggren.storm.crud.UpdateQuery;
 
 public class StormRepository implements InvocationHandler {
     
@@ -64,7 +65,9 @@ public class StormRepository implements InvocationHandler {
     
     private QueryChain getQueryChain() {
         return new SelectQuery().nextChain(
-                new DeleteQuery());
+                new DeleteQuery().nextChain(
+                new UpdateQuery()
+                        ));
     }
     
 }
