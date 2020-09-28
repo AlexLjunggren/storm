@@ -36,7 +36,9 @@ public abstract class MapperChain {
     
     protected Object instantiateObject(Class<?> clazz) {
         try {
-            return clazz.newInstance();
+            if (ReflectionUtils.hasNoArgsContrustor(clazz)) {
+                return clazz.newInstance();
+            }
         } catch (InstantiationException | IllegalAccessException e) {
             e.printStackTrace();
         }

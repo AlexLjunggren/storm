@@ -68,6 +68,13 @@ public class SelectQueryTest {
     }
     
     @Test
+    public void findByIdNoResultTest() {
+        UserRepository repository = StormRepository.newInstance(UserRepository.class);
+        TestUser user = repository.findById(999);
+        assertNull(user);
+    }
+    
+    @Test
     public void findByFirstAndLastNameTest() {
         UserRepository repository = StormRepository.newInstance(UserRepository.class);
         TestUser user = repository.findByFirstAndLastName("Gage", "Ljunggren");

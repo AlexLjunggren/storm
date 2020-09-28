@@ -6,6 +6,7 @@ import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Stream;
 
 import org.apache.commons.lang3.ClassUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
@@ -82,6 +83,11 @@ public class ReflectionUtils {
             return getOwnerType(type).getTypeName().equals(Set.class.getName());
         }
         return false;
+    }
+    
+    public static boolean hasNoArgsContrustor(Class<?> clazz) {
+        return Stream.of(clazz.getConstructors())
+                .allMatch(constructor -> constructor.getParameterCount() == 0);
     }
     
 }

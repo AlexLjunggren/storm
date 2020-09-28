@@ -11,6 +11,7 @@ import java.util.Set;
 
 import org.junit.Test;
 
+import com.ljunggren.storm.TestUser;
 import com.ljunggren.storm.utils.ReflectionUtils;
 
 public class ReflectionUtilsTest {
@@ -26,6 +27,7 @@ public class ReflectionUtilsTest {
     Set<Integer> intergerSet;
     int primitiveInteger;
     Integer objectInteger;
+    TestUser testUser;
 
     @Test
     public void getOwnerTypeNullTest() {
@@ -210,6 +212,20 @@ public class ReflectionUtilsTest {
         Field field = ReflectionUtilsTest.class.getDeclaredField("stringList");
         Type fieldType = field.getGenericType();
         assertFalse(ReflectionUtils.isSet(fieldType));
+    }
+    
+    @Test
+    public void hasNoArgsConstructorTest() throws NoSuchFieldException, SecurityException {
+        Field field = ReflectionUtilsTest.class.getDeclaredField("testUser");
+        Type fieldType = field.getGenericType();
+        assertTrue(ReflectionUtils.hasNoArgsContrustor((Class<?>) fieldType));
+    }
+    
+    @Test
+    public void hasNoArgsConstructorFalseTest() throws NoSuchFieldException, SecurityException {
+        Field field = ReflectionUtilsTest.class.getDeclaredField("string");
+        Type fieldType = field.getGenericType();
+        assertFalse(ReflectionUtils.hasNoArgsContrustor((Class<?>) fieldType));
     }
     
 }
