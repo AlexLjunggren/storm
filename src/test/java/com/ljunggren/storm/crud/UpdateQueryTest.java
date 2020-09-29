@@ -24,6 +24,9 @@ public class UpdateQueryTest {
         @Update(sql = "update users set firstname = ? where id = ?")
         public int updateFirstName(String name, int id);
         
+        @Update
+        public int update(TestUser user);
+        
         @Select(sql = "select * from users where id = ?")
         public TestUser findById(int id);
         
@@ -44,6 +47,18 @@ public class UpdateQueryTest {
         TestUser user = repository.findById(1);
         assertEquals(1, updates);
         assertEquals("Bob", user.getFirstName());
+    }
+    
+    @Test
+    public void updateTest() {
+        UserRepository repository = StormRepository.newInstance(UserRepository.class);
+        TestUser user = repository.findById(1);
+        assertEquals("Alex", user.getFirstName());
+        user.setFirstName("Alexander");
+        int updates = repository.update(user);
+        user = repository.findById(1);
+        assertEquals("Alexander", user.getFirstName());
+        assertEquals(1, updates);
     }
 
 }

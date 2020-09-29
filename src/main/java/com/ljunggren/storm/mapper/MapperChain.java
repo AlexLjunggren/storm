@@ -13,7 +13,7 @@ import java.util.stream.IntStream;
 
 import org.apache.commons.lang3.reflect.FieldUtils;
 
-import com.ljunggren.storm.annotation.ColumnProperty;
+import com.ljunggren.storm.annotation.entity.ColumnProperty;
 import com.ljunggren.storm.utils.ReflectionUtils;
 
 public abstract class MapperChain {
@@ -53,7 +53,7 @@ public abstract class MapperChain {
         return mapToObject(resultSet, object, fields);
     }
     
-    private Object mapToPrimitive(ResultSet resultSet) {
+    protected Object mapToPrimitive(ResultSet resultSet) {
         return getColumnValue(resultSet, 1);
     }
 

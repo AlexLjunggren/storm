@@ -90,4 +90,13 @@ public class ReflectionUtils {
                 .allMatch(constructor -> constructor.getParameterCount() == 0);
     }
     
+    public static Object getFieldValue(Field field, Object target) {
+        try {
+            return FieldUtils.readField(field, target, true);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    
 }

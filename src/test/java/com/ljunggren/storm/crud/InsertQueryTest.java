@@ -10,6 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.ljunggren.storm.StormRepository;
+import com.ljunggren.storm.TestUser;
 import com.ljunggren.storm.annotation.Database;
 import com.ljunggren.storm.annotation.Insert;
 import com.ljunggren.storm.annotation.Select;
@@ -24,6 +25,9 @@ public class InsertQueryTest {
         @Insert(sql = "insert into users (firstname, lastname, employee_id) values (?, ?, ?)")
         public int add(String firstName, String lastName, int employeeID);
 
+        @Insert
+        public int insert(TestUser user);
+        
         @Select(sql = "select count(*) from users")
         public long count();
         
@@ -38,10 +42,24 @@ public class InsertQueryTest {
     }
 
     @Test
-    public void test() {
+    public void addTest() {
         UserRepository repository = StormRepository.newInstance(UserRepository.class);
         long beforeCount = repository.count();
         int inserts = repository.add("Jane", "Doe", 104);
+        long afterCount = repository.count();
+        assertEquals(1, inserts);
+        assertTrue(beforeCount < afterCount);
+    }
+    
+    @Test
+    public void insertTest() {
+        UserRepository repository = StormRepository.newInstance(UserRepository.class);
+        TestUser user = new TestUser();
+        user.setFirstName("Jane");
+        user.setLastName("Doe");
+        user.setEmployeeID(104);
+        long beforeCount = repository.count();
+        int inserts = repository.insert(user);
         long afterCount = repository.count();
         assertEquals(1, inserts);
         assertTrue(beforeCount < afterCount);
