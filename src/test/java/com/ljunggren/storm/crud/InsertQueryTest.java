@@ -28,6 +28,9 @@ public class InsertQueryTest {
         @Insert
         public int insert(TestUser user);
         
+        @Insert
+        public int insertAll(TestUser... users);
+        
         @Select(sql = "select count(*) from users")
         public long count();
         
@@ -54,14 +57,26 @@ public class InsertQueryTest {
     @Test
     public void insertTest() {
         UserRepository repository = StormRepository.newInstance(UserRepository.class);
-        TestUser user = new TestUser();
-        user.setFirstName("Jane");
-        user.setLastName("Doe");
-        user.setEmployeeID(104);
+        TestUser jane = new TestUser();
+        jane.setFirstName("Jane");
         long beforeCount = repository.count();
-        int inserts = repository.insert(user);
+        int inserts = repository.insert(jane);
         long afterCount = repository.count();
         assertEquals(1, inserts);
+        assertTrue(beforeCount < afterCount);
+    }
+    
+    @Test
+    public void insertAllTest() {
+        UserRepository repository = StormRepository.newInstance(UserRepository.class);
+        TestUser jane = new TestUser();
+        jane.setFirstName("Jane");
+        TestUser greg = new TestUser();
+        greg.setFirstName("Greg");
+        long beforeCount = repository.count();
+        int inserts = repository.insertAll(jane, greg);
+        long afterCount = repository.count();
+        assertEquals(2, inserts);
         assertTrue(beforeCount < afterCount);
     }
 

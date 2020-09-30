@@ -28,6 +28,9 @@ public class DeleteQueryTest {
         @Delete
         public int delete(TestUser user);
         
+        @Delete
+        public int deleteAll(TestUser... users);
+        
         @Select(sql = "select count(*) from users")
         public long count();
         
@@ -62,6 +65,18 @@ public class DeleteQueryTest {
         int deletes = repository.delete(user);
         long afterCount = repository.count();
         assertEquals(1, deletes);
+        assertTrue(beforeCount > afterCount);
+    }
+    
+    @Test
+    public void deleteAllTest() {
+        UserRepository repository = StormRepository.newInstance(UserRepository.class);
+        long beforeCount = repository.count();
+        TestUser user1 = repository.findById(1);
+        TestUser user2 = repository.findById(2);
+        int deletes = repository.deleteAll(user1, user2);
+        long afterCount = repository.count();
+        assertEquals(2, deletes);
         assertTrue(beforeCount > afterCount);
     }
 

@@ -4,10 +4,13 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 import com.ljunggren.storm.annotation.Insert;
 import com.ljunggren.storm.context.Context;
 import com.ljunggren.storm.utils.QueryBuilder;
+import com.ljunggren.storm.utils.ReflectionUtils;
 
 public class InsertQuery extends QueryChain {
     
@@ -21,8 +24,15 @@ public class InsertQuery extends QueryChain {
     }
     
     private int executeNonNativeQuery(Context context, Object[] args, Type returnType) {
-        // add check for multiple arguments
-        QueryBuilder queryBuilder = new QueryBuilder(args[0]);
+        return Arrays.stream(args).map(arg -> executeNonNativeQuery(context, arg, returnType))
+                .collect(Collectors.summingInt(Integer::intValue));
+    }
+    
+    private int executeNonNativeQuery(Context context, Object arg, Type returnType) {
+        if (ReflectionUtils.isArray(arg.getClass())) {
+            return executeNonNativeQuery(context, (Object[]) arg, returnType);
+        }
+        QueryBuilder queryBuilder = new QueryBuilder(arg);
         String sql = queryBuilder.buildInsertSQL();
         Object[] generatedArgs = queryBuilder.getInsertArgs();
         return executeQuery(sql, context, generatedArgs, returnType);
