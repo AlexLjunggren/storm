@@ -8,12 +8,4 @@ public class ContextException extends RuntimeException {
         super(message);
     }
     
-    public ContextException(Throwable cause) {
-        super(cause);
-    }
-    
-    public ContextException(String message, Throwable cause) {
-        super(message, cause);
-    }
-    
 }

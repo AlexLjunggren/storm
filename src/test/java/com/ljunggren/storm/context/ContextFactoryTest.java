@@ -2,14 +2,12 @@ package com.ljunggren.storm.context;
 
 import static org.junit.Assert.assertEquals;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.ljunggren.storm.exceptions.ContextException;
 
 public class ContextFactoryTest {
 
-    @Ignore
     @Test
     public void getContextTest() {
         Context context = new ContextFactory().getContext("H2");
@@ -17,7 +15,6 @@ public class ContextFactoryTest {
         assertEquals("org.h2.Driver", context.getDriver());
     }
 
-    @Ignore
     @Test(expected = ContextException.class)
     public void getNoContextByNameTest() {
         new ContextFactory().getContext("DNE");

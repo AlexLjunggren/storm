@@ -131,6 +131,13 @@ public class ReflectionUtilsTest {
     }
     
     @Test
+    public void isIntegerFalseTest() throws NoSuchFieldException, SecurityException {
+        Field field = ReflectionUtilsTest.class.getDeclaredField("string");
+        Type fieldType = field.getGenericType();
+        assertFalse(ReflectionUtils.isInteger(fieldType));
+    }
+    
+    @Test
     public void isPrimitiveFalseTest() throws NoSuchFieldException, SecurityException {
         Field field = ReflectionUtilsTest.class.getDeclaredField("stringList");
         Type fieldType = field.getGenericType();
