@@ -23,27 +23,11 @@ public class JSONUtils {
         }
     }
     
-    public static String objectToJson(Object object) {
+    public static String objectToJson(Object object) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         String json = "";
-        try {
-            json = mapper.writeValueAsString(object);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
+        json = mapper.writeValueAsString(object);
         return json;
-    }
-    
-    @SuppressWarnings({ "unchecked", "rawtypes" })
-    public static <T> T jsonToObject(String json, Class clazz) {
-        ObjectMapper mapper = new ObjectMapper();
-        try {
-            return (T) mapper.readValue(json, clazz);
-        } 
-        catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
     }
     
     @SuppressWarnings("rawtypes")

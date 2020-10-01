@@ -61,13 +61,6 @@ public class JSONUtilsTest {
     }
     
     @Test
-    public void jsonToObjectTest() {
-        String json = JSONUtils.objectToJson(getUser());
-        TestUser user = JSONUtils.jsonToObject(json, TestUser.class);
-        assertEquals(getUser(), user);
-    }
-    
-    @Test
     public void jsonToListObjectTest() throws JsonMappingException, JsonProcessingException {
         List<String> expected = Arrays.asList(new String[] {"Alex", "Christie", "Gage"});
         String json = JSONUtils.objectToJson(expected);
