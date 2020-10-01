@@ -12,6 +12,7 @@ import org.junit.Test;
 
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.ljunggren.storm.TestUser;
 
@@ -67,7 +68,7 @@ public class JSONUtilsTest {
     }
     
     @Test
-    public void jsonToListObjectTest() {
+    public void jsonToListObjectTest() throws JsonMappingException, JsonProcessingException {
         List<String> expected = Arrays.asList(new String[] {"Alex", "Christie", "Gage"});
         String json = JSONUtils.objectToJson(expected);
         List<String> actual = JSONUtils.jsonToListObject(json, String.class);

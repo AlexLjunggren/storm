@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class JSONUtils {
@@ -46,15 +47,10 @@ public class JSONUtils {
     }
     
     @SuppressWarnings("rawtypes")
-    public static <T> T jsonToListObject(String json, Class clazz) {
+    public static <T> T jsonToListObject(String json, Class clazz) throws JsonMappingException, JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         JavaType type = mapper.getTypeFactory().constructCollectionType(List.class, clazz);
-        try {
-            return mapper.readValue(json, type);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
+        return mapper.readValue(json, type);
     }
     
 }
