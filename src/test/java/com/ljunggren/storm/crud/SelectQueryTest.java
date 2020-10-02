@@ -18,6 +18,7 @@ import com.ljunggren.storm.annotation.Database;
 import com.ljunggren.storm.annotation.Select;
 import com.ljunggren.storm.context.Context;
 import com.ljunggren.storm.context.ContextFactory;
+import com.ljunggren.storm.exceptions.StormException;
 
 public class SelectQueryTest {
 
@@ -41,6 +42,10 @@ public class SelectQueryTest {
 
         @Select(sql = "select * from users")
         public Set<TestUser> fetchAll();
+
+        @Select(sql = "nonsense")
+        public int nonsense();
+        
     }
 
     @Before
@@ -112,4 +117,9 @@ public class SelectQueryTest {
         assertTrue(users.size() > 0);
     }
 
+    @Test(expected = StormException.class)
+    public void nonsenseTest() {
+        UserRepository repository = StormRepository.newInstance(UserRepository.class);
+        repository.nonsense();
+    }
 }

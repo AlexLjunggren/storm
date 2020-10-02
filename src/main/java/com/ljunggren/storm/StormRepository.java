@@ -17,6 +17,7 @@ import com.ljunggren.storm.crud.InsertQuery;
 import com.ljunggren.storm.crud.QueryChain;
 import com.ljunggren.storm.crud.SelectQuery;
 import com.ljunggren.storm.crud.UpdateQuery;
+import com.ljunggren.storm.exceptions.StormException;
 
 public class StormRepository implements InvocationHandler {
     
@@ -54,7 +55,11 @@ public class StormRepository implements InvocationHandler {
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         Iterator<Annotation> annotations = Arrays.stream(method.getAnnotations()).iterator();
         Type returnType = method.getGenericReturnType();
-        return execute(annotations, args, returnType);
+        try {
+            return execute(annotations, args, returnType);
+        } catch (SQLException e) {
+            throw new StormException(e.getMessage());
+        }
     }
     
     private Object execute(Iterator<Annotation> annotations, Object[] args, Type returnType) throws SQLException {

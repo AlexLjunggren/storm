@@ -16,6 +16,7 @@ import com.ljunggren.storm.annotation.Delete;
 import com.ljunggren.storm.annotation.Select;
 import com.ljunggren.storm.context.Context;
 import com.ljunggren.storm.context.ContextFactory;
+import com.ljunggren.storm.exceptions.StormException;
 
 public class DeleteQueryTest {
 
@@ -30,6 +31,9 @@ public class DeleteQueryTest {
         
         @Delete
         public int deleteAll(TestUser... users);
+        
+        @Delete(sql = "nonsense")
+        public int nonsense();
         
         @Select(sql = "select count(*) from users")
         public long count();
@@ -78,6 +82,12 @@ public class DeleteQueryTest {
         long afterCount = repository.count();
         assertEquals(2, deletes);
         assertTrue(beforeCount > afterCount);
+    }
+    
+    @Test(expected = StormException.class)
+    public void nonsenseTest() {
+        UserRepository repository = StormRepository.newInstance(UserRepository.class);
+        repository.nonsense();
     }
 
 }

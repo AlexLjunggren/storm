@@ -15,6 +15,7 @@ import com.ljunggren.storm.annotation.Select;
 import com.ljunggren.storm.annotation.Update;
 import com.ljunggren.storm.context.Context;
 import com.ljunggren.storm.context.ContextFactory;
+import com.ljunggren.storm.exceptions.StormException;
 
 public class UpdateQueryTest {
 
@@ -29,6 +30,9 @@ public class UpdateQueryTest {
         
         @Update
         public int updateAll(TestUser... users);
+        
+        @Update(sql = "nonsense")
+        public int nonsense();
         
         @Select(sql = "select * from users where id = ?")
         public TestUser findById(int id);
@@ -77,6 +81,12 @@ public class UpdateQueryTest {
         assertEquals(2, updates);
         assertEquals(888, user1.getEmployeeID());
         assertEquals(999, user2.getEmployeeID());
+    }
+    
+    @Test(expected = StormException.class)
+    public void nonsenseTest() {
+        UserRepository repository = StormRepository.newInstance(UserRepository.class);
+        repository.nonsense();
     }
 
 }

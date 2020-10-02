@@ -16,6 +16,7 @@ import com.ljunggren.storm.annotation.Insert;
 import com.ljunggren.storm.annotation.Select;
 import com.ljunggren.storm.context.Context;
 import com.ljunggren.storm.context.ContextFactory;
+import com.ljunggren.storm.exceptions.StormException;
 
 public class InsertQueryTest {
 
@@ -30,6 +31,9 @@ public class InsertQueryTest {
         
         @Insert
         public int insertAll(TestUser... users);
+        
+        @Insert(sql = "nonsense")
+        public int nonsense();
         
         @Select(sql = "select count(*) from users")
         public long count();
@@ -78,6 +82,12 @@ public class InsertQueryTest {
         long afterCount = repository.count();
         assertEquals(2, inserts);
         assertTrue(beforeCount < afterCount);
+    }
+    
+    @Test(expected = StormException.class)
+    public void nonsenseTest() {
+        UserRepository repository = StormRepository.newInstance(UserRepository.class);
+        repository.nonsense();
     }
 
 }
