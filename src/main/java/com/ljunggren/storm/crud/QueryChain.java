@@ -5,8 +5,10 @@ import java.lang.reflect.Type;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.function.Function;
 
 import com.ljunggren.storm.context.Context;
+import com.ljunggren.storm.exceptions.FunctionWithException;
 
 public abstract class QueryChain {
 
@@ -17,7 +19,7 @@ public abstract class QueryChain {
         return this;
     }
     
-    public abstract Object execute(Annotation annotation, Context context, Object[] args, Type returnType);
+    public abstract Object execute(Annotation annotation, Context context, Object[] args, Type returnType) throws SQLException;
     
     protected void setParameters(PreparedStatement preparedStatement, Object[] args) throws SQLException {
         if (args != null) {
@@ -27,14 +29,19 @@ public abstract class QueryChain {
         }
     }
     
-    protected void closeConnection(Connection connection) {
+    protected void closeConnection(Connection connection) throws SQLException {
         if (connection != null) {
-            try {
-                connection.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            connection.close();
         }
     }
     
+    protected <T, R, E extends Exception> Function<T, R> wrapper(FunctionWithException<T, R, E> fe) {
+        return arg -> {
+            try {
+                return fe.apply(arg);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        };
+    }    
 }

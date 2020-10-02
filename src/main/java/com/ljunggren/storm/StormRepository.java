@@ -5,6 +5,7 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.lang.reflect.Type;
+import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.Iterator;
 
@@ -56,7 +57,7 @@ public class StormRepository implements InvocationHandler {
         return execute(annotations, args, returnType);
     }
     
-    private Object execute(Iterator<Annotation> annotations, Object[] args, Type returnType) {
+    private Object execute(Iterator<Annotation> annotations, Object[] args, Type returnType) throws SQLException {
         if (annotations.hasNext()) {
             Object object = getQueryChain().execute(annotations.next(), context, args, returnType);
             return object == null ? execute(annotations, args, returnType) : object;
