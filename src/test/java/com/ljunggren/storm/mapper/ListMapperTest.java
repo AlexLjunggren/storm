@@ -4,7 +4,6 @@ import static org.junit.Assert.assertEquals;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Type;
-import java.sql.SQLException;
 import java.util.List;
 
 import org.junit.Test;
@@ -22,7 +21,7 @@ public class ListMapperTest {
 
     @Test
     @SuppressWarnings("unchecked")
-    public void mapTest() throws NoSuchFieldException, SecurityException, SQLException {
+    public void mapTest() throws Exception {
         resultSet = new MockResultSet("mock");
         resultSet.addColumn("ID", new Integer[] {1, 2});
         resultSet.addColumn("FIRSTNAME", new String[] {"Alex", "Christie"});
@@ -47,7 +46,7 @@ public class ListMapperTest {
     
     @Test
     @SuppressWarnings("unchecked")
-    public void mapPrimitiveTest() throws NoSuchFieldException, SecurityException, SQLException {
+    public void mapPrimitiveTest() throws Exception {
         resultSet = new MockResultSet("mock");
         resultSet.addColumn("FIRSTNAME", new String[] {"Alex", "Christie"});
         

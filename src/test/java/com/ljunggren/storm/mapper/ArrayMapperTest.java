@@ -4,7 +4,6 @@ import static org.junit.Assert.assertEquals;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Type;
-import java.sql.SQLException;
 
 import org.junit.Test;
 
@@ -20,7 +19,7 @@ public class ArrayMapperTest {
     private MapperChain mapper = new ArrayMapper();
 
     @Test
-    public void mapTest() throws NoSuchFieldException, SecurityException, SQLException {
+    public void mapTest() throws Exception {
         resultSet = new MockResultSet("mock");
         resultSet.addColumn("ID", new Integer[] {1, 2});
         resultSet.addColumn("FIRSTNAME", new String[] {"Alex", "Christie"});
@@ -44,7 +43,7 @@ public class ArrayMapperTest {
     }
     
     @Test
-    public void mapPrimitiveTest() throws NoSuchFieldException, SecurityException, SQLException {
+    public void mapPrimitiveTest() throws Exception {
         resultSet = new MockResultSet("mock");
         resultSet.addColumn("FIRSTNAME", new String[] {"Alex", "Christie"});
         

@@ -9,7 +9,6 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.IntStream;
 
 import org.apache.commons.lang3.reflect.FieldUtils;
 
@@ -25,7 +24,7 @@ public abstract class MapperChain {
         return this;
     }
     
-    public abstract Object map(ResultSet resultSet, Type returnType) throws SQLException;
+    public abstract Object map(ResultSet resultSet, Type returnType) throws Exception;
     
     protected Class<?> getClassFromType(Type type) {
         if (type instanceof ParameterizedType) {
@@ -34,18 +33,14 @@ public abstract class MapperChain {
         return (Class<?>) type;
     }
     
-    protected Object instantiateObject(Class<?> clazz) {
-        try {
-            if (ReflectionUtils.hasNoArgsContrustor(clazz)) {
-                return clazz.newInstance();
-            }
-        } catch (InstantiationException | IllegalAccessException e) {
-            e.printStackTrace();
+    protected Object instantiateObject(Class<?> clazz) throws InstantiationException, IllegalAccessException {
+        if (ReflectionUtils.hasNoArgsContrustor(clazz)) {
+            return clazz.newInstance();
         }
         return null;
     }
     
-    protected Object mapToObject(ResultSet resultSet, Class<?> clazz, List<Field> fields) {
+    protected Object mapToObject(ResultSet resultSet, Class<?> clazz, List<Field> fields) throws SQLException, IllegalAccessException, InstantiationException {
         if (ReflectionUtils.isPrimitive(clazz) || ReflectionUtils.isString(clazz)) {
             return mapToPrimitive(resultSet);
         }
@@ -53,57 +48,37 @@ public abstract class MapperChain {
         return mapToObject(resultSet, object, fields);
     }
     
-    protected Object mapToPrimitive(ResultSet resultSet) {
+    protected Object mapToPrimitive(ResultSet resultSet) throws SQLException {
         return getColumnValue(resultSet, 1);
     }
 
-    private Object mapToObject(ResultSet resultSet, Object object, List<Field> fields) {
+    private Object mapToObject(ResultSet resultSet, Object object, List<Field> fields) throws SQLException, IllegalAccessException {
         ResultSetMetaData metaData = getMetaData(resultSet);
-        IntStream.range(1, getColumnCount(metaData) + 1).forEach(column -> {
+        for (int column = 1; column < getColumnCount(metaData) + 1; column++) {
             String columnName = getColumnName(metaData, column);
             Field field = findFieldByName(fields, columnName);
             Object value = getColumnValue(resultSet, column);
             if (columnName != null && field != null) {
                 writeToObject(field, object, value);
             }
-        });
+        }
         return object;
     }
     
-    protected Object getColumnValue(ResultSet resultSet, int column) {
-        try {
-            return resultSet.getObject(column);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
+    protected Object getColumnValue(ResultSet resultSet, int column) throws SQLException {
+        return resultSet.getObject(column);
     }
     
-    protected ResultSetMetaData getMetaData(ResultSet resultSet) {
-        try {
-            return resultSet.getMetaData();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
+    protected ResultSetMetaData getMetaData(ResultSet resultSet) throws SQLException {
+        return resultSet.getMetaData();
     }
     
-    protected int getColumnCount(ResultSetMetaData metaData) {
-        try {
-            return metaData.getColumnCount();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return 0;
+    protected int getColumnCount(ResultSetMetaData metaData) throws SQLException {
+        return metaData.getColumnCount();
     }
     
-    protected String getColumnName(ResultSetMetaData metaData, int column) {
-        try {
-            return metaData.getColumnName(column);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
+    protected String getColumnName(ResultSetMetaData metaData, int column) throws SQLException {
+        return metaData.getColumnName(column);
     }
     
     protected Field findFieldByName(List<Field> fields, String name) {
@@ -125,12 +100,8 @@ public abstract class MapperChain {
         return columnPropery == null ? false : ((ColumnProperty) columnPropery).name().toLowerCase().equals(name.toLowerCase());
     }
     
-    protected void writeToObject(Field field, Object object, Object value) {
-        try {
-            FieldUtils.writeField(field, object, value, true);
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
+    protected void writeToObject(Field field, Object object, Object value) throws IllegalAccessException {
+        FieldUtils.writeField(field, object, value, true);
     }
     
 }

@@ -278,7 +278,7 @@ public class ReflectionUtilsTest {
     }
     
     @Test
-    public void getFieldValueTest() throws NoSuchFieldException, SecurityException {
+    public void getFieldValueTest() throws NoSuchFieldException, SecurityException, IllegalAccessException {
         string = "test";
         Field field = ReflectionUtilsTest.class.getDeclaredField("string");
         String value = (String) ReflectionUtils.getFieldValue(field, this);

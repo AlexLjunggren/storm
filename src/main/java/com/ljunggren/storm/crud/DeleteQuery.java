@@ -10,13 +10,14 @@ import java.util.stream.Collectors;
 
 import com.ljunggren.storm.annotation.Delete;
 import com.ljunggren.storm.context.Context;
+import com.ljunggren.storm.utils.ExceptionUtils;
 import com.ljunggren.storm.utils.QueryBuilder;
 import com.ljunggren.storm.utils.ReflectionUtils;
 
 public class DeleteQuery extends QueryChain {
     
     @Override
-    public Object execute(Annotation annotation, Context context, Object[] args, Type returnType) throws SQLException {
+    public Object execute(Annotation annotation, Context context, Object[] args, Type returnType) throws Exception {
         if (annotation.annotationType() == Delete.class) {
             String sql = ((Delete) annotation).sql();
             return sql.isEmpty() ? executeNonNativeQuery(context, args, returnType) : executeQuery(sql, context, args, returnType);
@@ -25,11 +26,11 @@ public class DeleteQuery extends QueryChain {
     }
     
     private int executeNonNativeQuery(Context context, Object[] args, Type returnType) {
-        return Arrays.stream(args).map(wrapper(arg -> executeNonNativeQuery(context, arg, returnType)))
+        return Arrays.stream(args).map(ExceptionUtils.rethrowFunction(arg -> executeNonNativeQuery(context, arg, returnType)))
                 .collect(Collectors.summingInt(Integer::intValue));
     }
     
-    private int executeNonNativeQuery(Context context, Object arg, Type returnType) throws SQLException {
+    private int executeNonNativeQuery(Context context, Object arg, Type returnType) throws Exception {
         if (ReflectionUtils.isArray(arg.getClass())) {
             return executeNonNativeQuery(context, (Object[]) arg, returnType);
         }

@@ -25,7 +25,7 @@ public class PrimitiveMapperTest {
     }
     
     @Test
-    public void mapTest() throws NoSuchFieldException, SecurityException, SQLException {
+    public void mapTest() throws Exception {
         Field field = this.getClass().getDeclaredField("count");
         Type returnType = field.getGenericType();
         int count = (int) mapper.map(resultSet, returnType);

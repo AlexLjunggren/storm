@@ -61,7 +61,7 @@ public class QueryBuilderTest {
     }
 
     @Test
-    public void getUpdateArgsTest() {
+    public void getUpdateArgsTest() throws IllegalAccessException {
         QueryBuilder queryBuilder = new QueryBuilder(createBank());
         Object[] args = queryBuilder.getUpdateArgs();
         Object[] expecteds = new Object[] {"FirstBank", 101, 1};
@@ -77,7 +77,7 @@ public class QueryBuilderTest {
     }
     
     @Test
-    public void getDeleteArgsTest() {
+    public void getDeleteArgsTest() throws IllegalAccessException {
         QueryBuilder queryBuilder = new QueryBuilder(createBank());
         Object[] args = queryBuilder.getDeleteArgs();
         Object[] expecteds = new Object[] {1};

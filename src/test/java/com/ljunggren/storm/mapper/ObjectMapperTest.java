@@ -29,7 +29,7 @@ public class ObjectMapperTest {
     }
     
     @Test
-    public void mapTest() throws NoSuchFieldException, SecurityException, SQLException {
+    public void mapTest() throws Exception {
         Field field = this.getClass().getDeclaredField("user");
         Type returnType = field.getGenericType();
         TestUser user = (TestUser) mapper.map(resultSet, returnType);

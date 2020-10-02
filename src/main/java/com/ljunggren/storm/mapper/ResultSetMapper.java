@@ -2,7 +2,6 @@ package com.ljunggren.storm.mapper;
 
 import java.lang.reflect.Type;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 
 public class ResultSetMapper {
 
@@ -14,13 +13,8 @@ public class ResultSetMapper {
         this.returnType = returnType;
     }
     
-    public Object map() {
-        try {
-            return getChain().map(resultSet, returnType);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
+    public Object map() throws Exception {
+        return getChain().map(resultSet, returnType);
     }
     
     private MapperChain getChain() {
