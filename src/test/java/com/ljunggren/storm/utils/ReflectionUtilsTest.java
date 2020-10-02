@@ -28,6 +28,19 @@ public class ReflectionUtilsTest {
     int primitiveInteger;
     Integer objectInteger;
     TestUser testUser;
+    
+    @Test
+    public void constructorTest() {
+        ReflectionUtils reflectionUtils = new ReflectionUtils();
+        assertTrue(reflectionUtils instanceof ReflectionUtils);
+    }
+    
+    @Test
+    public void getObjectFieldsTest() {
+        List<Field> fields = ReflectionUtils.getObjectFields(this.getClass());
+        boolean hasStringList = fields.stream().anyMatch(field -> field.getName().equals("stringList"));
+        assertTrue(hasStringList);
+    }
 
     @Test
     public void getOwnerTypeNullTest() {
@@ -110,6 +123,14 @@ public class ReflectionUtilsTest {
     }
     
     @Test
+    public void getArrayComponentTypeFalseTest() throws NoSuchFieldException, SecurityException {
+        Field field = ReflectionUtilsTest.class.getDeclaredField("string");
+        Type fieldType = field.getGenericType();
+        Type type = ReflectionUtils.getArrayComponentType(fieldType);
+        assertEquals(null, type);
+    }
+    
+    @Test
     public void isPrimitiveTest() throws NoSuchFieldException, SecurityException {
         Field field = ReflectionUtilsTest.class.getDeclaredField("primitiveBoolean");
         Type fieldType = field.getGenericType();
@@ -117,14 +138,14 @@ public class ReflectionUtilsTest {
     }
     
     @Test
-    public void isPrimitiveIntegerTest() throws NoSuchFieldException, SecurityException {
+    public void isIntegerPrimitiveTest() throws NoSuchFieldException, SecurityException {
         Field field = ReflectionUtilsTest.class.getDeclaredField("primitiveInteger");
         Type fieldType = field.getGenericType();
         assertTrue(ReflectionUtils.isInteger(fieldType));
     }
     
     @Test
-    public void isObjectIntegerTest() throws NoSuchFieldException, SecurityException {
+    public void isIntegerObjectTest() throws NoSuchFieldException, SecurityException {
         Field field = ReflectionUtilsTest.class.getDeclaredField("objectInteger");
         Type fieldType = field.getGenericType();
         assertTrue(ReflectionUtils.isInteger(fieldType));
@@ -174,6 +195,13 @@ public class ReflectionUtilsTest {
     
     @Test
     public void isListFalseTest() throws NoSuchFieldException, SecurityException {
+        Field field = ReflectionUtilsTest.class.getDeclaredField("string");
+        Type fieldType = field.getGenericType();
+        assertFalse(ReflectionUtils.isList(fieldType));
+    }
+    
+    @Test
+    public void isListParamaterizedFalseTest() throws NoSuchFieldException, SecurityException {
         Field field = ReflectionUtilsTest.class.getDeclaredField("integerSet");
         Type fieldType = field.getGenericType();
         assertFalse(ReflectionUtils.isList(fieldType));
@@ -208,6 +236,13 @@ public class ReflectionUtilsTest {
     }
     
     @Test
+    public void isStringParameterizedTest() throws NoSuchFieldException, SecurityException {
+        Field field = ReflectionUtilsTest.class.getDeclaredField("stringList");
+        Type fieldType = field.getGenericType();
+        assertFalse(ReflectionUtils.isString(fieldType));
+    }
+    
+    @Test
     public void isSetTest() throws NoSuchFieldException, SecurityException {
         Field field = ReflectionUtilsTest.class.getDeclaredField("integerSet");
         Type fieldType = field.getGenericType();
@@ -215,8 +250,15 @@ public class ReflectionUtilsTest {
     }
     
     @Test
-    public void isSetFalseTest() throws NoSuchFieldException, SecurityException {
+    public void isSetParameterizedFalseTest() throws NoSuchFieldException, SecurityException {
         Field field = ReflectionUtilsTest.class.getDeclaredField("stringList");
+        Type fieldType = field.getGenericType();
+        assertFalse(ReflectionUtils.isSet(fieldType));
+    }
+    
+    @Test
+    public void isSetFalseTest() throws NoSuchFieldException, SecurityException {
+        Field field = ReflectionUtilsTest.class.getDeclaredField("string");
         Type fieldType = field.getGenericType();
         assertFalse(ReflectionUtils.isSet(fieldType));
     }
@@ -233,6 +275,14 @@ public class ReflectionUtilsTest {
         Field field = ReflectionUtilsTest.class.getDeclaredField("string");
         Type fieldType = field.getGenericType();
         assertFalse(ReflectionUtils.hasNoArgsContrustor((Class<?>) fieldType));
+    }
+    
+    @Test
+    public void getFieldValueTest() throws NoSuchFieldException, SecurityException {
+        string = "test";
+        Field field = ReflectionUtilsTest.class.getDeclaredField("string");
+        String value = (String) ReflectionUtils.getFieldValue(field, this);
+        assertEquals("test", value);
     }
     
 }
