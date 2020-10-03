@@ -10,6 +10,7 @@ import org.apache.commons.io.IOUtils;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.ljunggren.storm.StormPeek;
 import com.ljunggren.storm.StormRepository;
 import com.ljunggren.storm.TestUser;
 import com.ljunggren.storm.annotation.Database;
@@ -22,7 +23,7 @@ import com.ljunggren.storm.exceptions.StormException;
 public class UpdateQueryTest {
 
     @Database(context = "H2")
-    private interface UserRepository {
+    private interface UserRepository extends StormPeek<UserRepository> {
         
         @Update(sql = "update users set firstname = ? where id = ?")
         public int updateFirstName(String name, int id);
@@ -100,8 +101,8 @@ public class UpdateQueryTest {
     @Test
     public void peekTest() {
         Consumer<String> peek = e -> setGeneratedSQL(e);
-        UserRepository repository = StormRepository.newInstance(UserRepository.class, peek);
-        repository.updateFirstName("Bob", 1);
+        UserRepository repository = StormRepository.newInstance(UserRepository.class);
+        repository.peek(peek).updateFirstName("Bob", 1);
         assertTrue(generatedSQL.contains("update users set firstname = ? where id = ?"));
     }
 

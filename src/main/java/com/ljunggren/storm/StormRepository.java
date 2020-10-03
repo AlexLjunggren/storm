@@ -28,23 +28,11 @@ public class StormRepository implements InvocationHandler {
         this.context = getContextFromClass(clazz);
     }
     
-    private StormRepository(Class<?> clazz, Consumer<String> peek) {
-        this.context = getContextFromClass(clazz);
-        this.peek = peek;
-    }
-    
     public static <T> T newInstance(Class<T> clazz) {
         return clazz.cast(Proxy.newProxyInstance(
                 clazz.getClassLoader(), 
                 new Class[] { clazz },
                 new StormRepository(clazz)));
-    }
-    
-    public static <T> T newInstance(Class<T> clazz, Consumer<String> peek) {
-        return clazz.cast(Proxy.newProxyInstance(
-                clazz.getClassLoader(), 
-                new Class[] { clazz },
-                new StormRepository(clazz, peek)));
     }
     
     private Context getContextFromClass(Class<?> clazz) {
@@ -66,6 +54,9 @@ public class StormRepository implements InvocationHandler {
 
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+        if (method.getName().equals("peek")) {
+            return peek(proxy, args);
+        }
         Iterator<Annotation> annotations = Arrays.stream(method.getAnnotations()).iterator();
         Type returnType = method.getGenericReturnType();
         try {
@@ -89,6 +80,12 @@ public class StormRepository implements InvocationHandler {
                 new UpdateQuery(peek).nextChain(
                 new InsertQuery(peek)
                         )));
+    }
+    
+    @SuppressWarnings("unchecked")
+    private Object peek(Object proxy, Object[] args) {
+        this.peek = (Consumer<String>) args[0];
+        return proxy;
     }
     
 }
