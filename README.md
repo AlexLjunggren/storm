@@ -108,9 +108,14 @@ public int insert(String firstName, String lastName, int employeeID);
 Peek at SQL statement
 
 ```java
-Consumer<String> peek = e -> System.out.println(e);
-UserRepository repository = StormRepository.newInstance(UserRepository.class, peek);
-repository.count();
+@Database(context = "H2")
+private interface UserRepository extends StormPeek<UserRepository> {
+    ...
+}
+
+Consumer<String> print = e -> System.out.println(e);
+UserRepository repository = StormRepository.newInstance(UserRepository.class);
+repository.peek(print).count();
 ```
 
 ```
