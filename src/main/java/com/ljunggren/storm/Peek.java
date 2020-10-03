@@ -2,7 +2,7 @@ package com.ljunggren.storm;
 
 import java.util.function.Consumer;
 
-public interface StormPeek<T extends StormPeek<T>> {
+public interface Peek<T extends Peek<T>> {
 
     T peek(Consumer<String> peek);
     

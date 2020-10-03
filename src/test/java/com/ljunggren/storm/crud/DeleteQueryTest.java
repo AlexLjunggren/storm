@@ -10,7 +10,7 @@ import org.apache.commons.io.IOUtils;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.ljunggren.storm.StormPeek;
+import com.ljunggren.storm.Peek;
 import com.ljunggren.storm.StormRepository;
 import com.ljunggren.storm.TestUser;
 import com.ljunggren.storm.annotation.Database;
@@ -23,7 +23,7 @@ import com.ljunggren.storm.exceptions.StormException;
 public class DeleteQueryTest {
 
     @Database(context = "H2")
-    private interface UserRepository extends StormPeek<UserRepository> {
+    private interface UserRepository extends Peek<UserRepository> {
         
         @Delete(sql = "delete from users where id = ?")
         public int deleteById(int id);
@@ -101,8 +101,8 @@ public class DeleteQueryTest {
     @Test
     public void peekTest() {
         Consumer<String> peek = e -> setGeneratedSQL(e);
-        UserRepository repository = StormRepository.newInstance(UserRepository.class);
-        repository.peek(peek).deleteById(1);
+        UserRepository repository = StormRepository.newInstance(UserRepository.class).peek(peek);
+        repository.deleteById(1);
         assertTrue(generatedSQL.contains("delete from users where id = ?"));
     }
 

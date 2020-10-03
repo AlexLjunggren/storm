@@ -10,7 +10,7 @@ import org.apache.commons.io.IOUtils;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.ljunggren.storm.StormPeek;
+import com.ljunggren.storm.Peek;
 import com.ljunggren.storm.StormRepository;
 import com.ljunggren.storm.TestUser;
 import com.ljunggren.storm.annotation.Database;
@@ -23,7 +23,7 @@ import com.ljunggren.storm.exceptions.StormException;
 public class InsertQueryTest {
 
     @Database(context = "H2")
-    private interface UserRepository extends StormPeek<UserRepository> {
+    private interface UserRepository extends Peek<UserRepository> {
         
         @Insert(sql = "insert into users (firstname, lastname, employee_id) values (?, ?, ?)")
         public int insert(String firstName, String lastName, int employeeID);
@@ -101,8 +101,8 @@ public class InsertQueryTest {
     @Test
     public void peekTest() {
         Consumer<String> peek = e -> setGeneratedSQL(e);
-        UserRepository repository = StormRepository.newInstance(UserRepository.class);
-        repository.peek(peek).insert("Jane", "Doe", 104);
+        UserRepository repository = StormRepository.newInstance(UserRepository.class).peek(peek);
+        repository.insert("Jane", "Doe", 104);
         assertTrue(generatedSQL.contains("insert into users (firstname, lastname, employee_id) values (?, ?, ?)"));
     }
 

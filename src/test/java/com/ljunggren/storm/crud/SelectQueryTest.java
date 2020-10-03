@@ -13,7 +13,7 @@ import org.apache.commons.io.IOUtils;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.ljunggren.storm.StormPeek;
+import com.ljunggren.storm.Peek;
 import com.ljunggren.storm.StormRepository;
 import com.ljunggren.storm.TestUser;
 import com.ljunggren.storm.annotation.Database;
@@ -25,7 +25,7 @@ import com.ljunggren.storm.exceptions.StormException;
 public class SelectQueryTest {
 
     @Database(context = "H2")
-    private interface UserRepository extends StormPeek<UserRepository> {
+    private interface UserRepository extends Peek<UserRepository> {
         
         @Select(sql = "select * from users order by id")
         public TestUser[] fetchAllOrdered();
@@ -134,8 +134,8 @@ public class SelectQueryTest {
     @Test
     public void peekTest() {
         Consumer<String> peek = e -> setGeneratedSQL(e);
-        UserRepository repository = StormRepository.newInstance(UserRepository.class);
-        repository.peek(peek).fetchAllOrdered();
+        UserRepository repository = StormRepository.newInstance(UserRepository.class).peek(peek);
+        repository.fetchAllOrdered();
         assertTrue(generatedSQL.contains("select * from users order by id"));
     }
 

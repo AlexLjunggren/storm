@@ -114,8 +114,8 @@ private interface UserRepository extends StormPeek<UserRepository> {
 }
 
 Consumer<String> print = e -> System.out.println(e);
-UserRepository repository = StormRepository.newInstance(UserRepository.class);
-repository.peek(print).count();
+UserRepository repository = StormRepository.newInstance(UserRepository.class).peek(print);
+repository.count();
 ```
 
 ```
