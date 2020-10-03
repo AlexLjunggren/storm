@@ -26,6 +26,12 @@ public class JSONUtilsTest {
     }
     
     @Test
+    public void instantiationTest() {
+        JSONUtils jsonUtils = new JSONUtils();
+        assertTrue(jsonUtils instanceof JSONUtils);
+    }
+    
+    @Test
     public void isValidJsonTest() throws JsonGenerationException, JsonMappingException, IOException {
         String json = JSONUtils.objectToJson(getUser());
         boolean actual = JSONUtils.isValidJSON(json);

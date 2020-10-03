@@ -7,6 +7,7 @@ import static org.junit.Assert.assertTrue;
 import java.sql.Statement;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Consumer;
 
 import org.apache.commons.io.IOUtils;
 import org.junit.Before;
@@ -46,6 +47,12 @@ public class SelectQueryTest {
         @Select(sql = "nonsense")
         public int nonsense();
         
+    }
+
+    private String generatedSQL;
+
+    public void setGeneratedSQL(String generatedSQL) {
+        this.generatedSQL = generatedSQL;
     }
 
     @Before
@@ -122,4 +129,13 @@ public class SelectQueryTest {
         UserRepository repository = StormRepository.newInstance(UserRepository.class);
         repository.nonsense();
     }
+
+    @Test
+    public void peekTest() {
+        Consumer<String> peek = e -> setGeneratedSQL(e);
+        UserRepository repository = StormRepository.newInstance(UserRepository.class, peek);
+        repository.fetchAllOrdered();
+        assertTrue(generatedSQL.contains("select * from users order by id"));
+    }
+
 }

@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.sql.Statement;
+import java.util.function.Consumer;
 
 import org.apache.commons.io.IOUtils;
 import org.junit.Before;
@@ -39,7 +40,13 @@ public class InsertQueryTest {
         public long count();
         
     }
-        
+    
+    private String generatedSQL;
+
+    public void setGeneratedSQL(String generatedSQL) {
+        this.generatedSQL = generatedSQL;
+    }
+
     @Before
     public void setup() throws Exception {
         Context context = new ContextFactory().getContext("H2");
@@ -88,6 +95,14 @@ public class InsertQueryTest {
     public void nonsenseTest() {
         UserRepository repository = StormRepository.newInstance(UserRepository.class);
         repository.nonsense();
+    }
+    
+    @Test
+    public void peekTest() {
+        Consumer<String> peek = e -> setGeneratedSQL(e);
+        UserRepository repository = StormRepository.newInstance(UserRepository.class, peek);
+        repository.add("Jane", "Doe", 104);
+        assertTrue(generatedSQL.contains("insert into users (firstname, lastname, employee_id) values (?, ?, ?)"));
     }
 
 }

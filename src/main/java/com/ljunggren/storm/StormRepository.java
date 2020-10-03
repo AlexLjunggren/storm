@@ -7,6 +7,7 @@ import java.lang.reflect.Proxy;
 import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.function.Consumer;
 
 import com.ljunggren.storm.annotation.Database;
 import com.ljunggren.storm.context.Context;
@@ -21,16 +22,29 @@ import com.ljunggren.storm.exceptions.StormException;
 public class StormRepository implements InvocationHandler {
     
     private Context context;
+    private Consumer<String> peek;
     
     private StormRepository(Class<?> clazz) {
         this.context = getContextFromClass(clazz);
     }
-
+    
+    private StormRepository(Class<?> clazz, Consumer<String> peek) {
+        this.context = getContextFromClass(clazz);
+        this.peek = peek;
+    }
+    
     public static <T> T newInstance(Class<T> clazz) {
         return clazz.cast(Proxy.newProxyInstance(
                 clazz.getClassLoader(), 
                 new Class[] { clazz },
                 new StormRepository(clazz)));
+    }
+    
+    public static <T> T newInstance(Class<T> clazz, Consumer<String> peek) {
+        return clazz.cast(Proxy.newProxyInstance(
+                clazz.getClassLoader(), 
+                new Class[] { clazz },
+                new StormRepository(clazz, peek)));
     }
     
     private Context getContextFromClass(Class<?> clazz) {
@@ -70,10 +84,10 @@ public class StormRepository implements InvocationHandler {
     }
     
     private QueryChain getQueryChain() {
-        return new SelectQuery().nextChain(
-                new DeleteQuery().nextChain(
-                new UpdateQuery().nextChain(
-                new InsertQuery()
+        return new SelectQuery(peek).nextChain(
+                new DeleteQuery(peek).nextChain(
+                new UpdateQuery(peek).nextChain(
+                new InsertQuery(peek)
                         )));
     }
     
