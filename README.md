@@ -38,11 +38,21 @@ UserRepository repository = StormRepository.newInstance(UserRepository.class);
 List<User> users = repository.fetchAll();
 ```
 
-Mapping
+Entity Mapping
 
 ```java
-@ColumnProperty(name = "employee_id")
-private int employeeID;
+@Table(name = "users")
+public class User {
+
+    @Id(generated = Generated.AUTO)
+    private int id;
+    private String firstName;
+    private String lastName;
+    
+    @ColumnProperty(name = "employee_id")
+    private int employeeID;
+    
+}
 ```
 
 ## Annotations ##
@@ -51,22 +61,60 @@ Select
 
 ```java
 @Select(sql = "select * from users")
+List<User> fetchAll();
 ```
 
 Delete
 
 ```java
+@Delete
+public int delete(User user);
+        
+@Delete
+public int deleteAll(User... users);
+        
 @Delete(sql = "delete from users where id = ?")
+public int deleteById(int id);
 ```
 
 Update
 
 ```java
+@Update
+public int update(User user);
+
+@Update
+public int updateAll(User... users);
+
 @Update(sql = "update users set firstname = ? where id = ?")
+public int updateFirstName(String name, int id);
 ```
 
 Insert
 
 ```java
+@Insert
+public int insert(User user);
+        
+@Insert
+public int insertAll(User... users);
+        
 @Insert(sql = "insert into users (firstname, lastname, employee_id) values (?, ?, ?)")
+public int insert(String firstName, String lastName, int employeeID);
 ```
+
+## Peek ##
+
+Peek at SQL statement
+
+```java
+Consumer<String> peek = e -> System.out.println(e);
+UserRepository repository = StormRepository.newInstance(UserRepository.class, peek);
+repository.count();
+```
+
+```
+Output: select count(*) from users
+```
+
+

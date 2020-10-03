@@ -25,7 +25,7 @@ public class InsertQueryTest {
     private interface UserRepository {
         
         @Insert(sql = "insert into users (firstname, lastname, employee_id) values (?, ?, ?)")
-        public int add(String firstName, String lastName, int employeeID);
+        public int insert(String firstName, String lastName, int employeeID);
 
         @Insert
         public int insert(TestUser user);
@@ -56,10 +56,10 @@ public class InsertQueryTest {
     }
 
     @Test
-    public void addTest() {
+    public void insertNativeTest() {
         UserRepository repository = StormRepository.newInstance(UserRepository.class);
         long beforeCount = repository.count();
-        int inserts = repository.add("Jane", "Doe", 104);
+        int inserts = repository.insert("Jane", "Doe", 104);
         long afterCount = repository.count();
         assertEquals(1, inserts);
         assertTrue(beforeCount < afterCount);
@@ -101,7 +101,7 @@ public class InsertQueryTest {
     public void peekTest() {
         Consumer<String> peek = e -> setGeneratedSQL(e);
         UserRepository repository = StormRepository.newInstance(UserRepository.class, peek);
-        repository.add("Jane", "Doe", 104);
+        repository.insert("Jane", "Doe", 104);
         assertTrue(generatedSQL.contains("insert into users (firstname, lastname, employee_id) values (?, ?, ?)"));
     }
 
