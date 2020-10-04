@@ -9,6 +9,7 @@ import com.ljunggren.storm.Paging;
 import com.ljunggren.storm.annotation.entity.ColumnProperty;
 import com.ljunggren.storm.annotation.entity.Id;
 import com.ljunggren.storm.annotation.entity.Table;
+import com.ljunggren.storm.annotation.entity.Transient;
 import com.ljunggren.storm.entity.Generated;
 
 import lombok.Data;
@@ -24,6 +25,8 @@ public class QueryBuilderTest {
         private String name;
         @ColumnProperty(name = "branch_id")
         private int branchId;
+        @Transient
+        private boolean closed;
         private Bank headquarters;
         
     }

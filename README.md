@@ -52,6 +52,8 @@ public class User {
     @ColumnProperty(name = "employee_id")
     private int employeeID;
     
+    @Transient
+    private boolean hourly;
 }
 ```
 
