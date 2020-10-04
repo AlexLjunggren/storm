@@ -109,7 +109,7 @@ Peek at SQL statement
 
 ```java
 @Database(context = "H2")
-private interface UserRepository extends StormPeek<UserRepository> {
+private interface UserRepository extends Peek<UserRepository> {
     ...
 }
 
@@ -136,12 +136,23 @@ new Paging(page, rows);
 ```java
 @Database(context = "H2")
 private interface UserRepository  {
+
     @Select(sql = "select * from users order by id")
     public User[] fetchAllOrdered(Paging paging);
-    ...
+
 }
 
-User[] users = repository.fetchAllOrdered(new Paging(2, 2));
+Paging paging = new Paging(2, 2);
+User[] users = repository.fetchAllOrdered(paging);
 
 ```
 
+** Note: ** Paging can be passed in at any point in the argument list
+
+```java
+@Select(sql = "select * from users where lastname = ?")
+public findByLastName(Paging paging, String lastName);
+    // or
+public findByLastName(String lastName, Paging paging);
+
+```

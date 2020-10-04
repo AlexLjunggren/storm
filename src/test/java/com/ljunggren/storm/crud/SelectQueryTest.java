@@ -34,6 +34,12 @@ public class SelectQueryTest {
         @Select(sql = "select * from users order by id")
         public TestUser[] fetchAllOrdered(Paging paging);
         
+        @Select(sql = "select * from users where lastname = ?")
+        public List<TestUser> findByLastName(String lastName, Paging paging);
+        
+        @Select(sql = "select * from users where lastname = ?")
+        public List<TestUser> findByLastName(Paging paging, String lastName);
+        
         @Select(sql = "select * from users where id = ?")
         public TestUser findById(int id);
         
@@ -81,6 +87,22 @@ public class SelectQueryTest {
         TestUser[] users = repository.fetchAllOrdered(new Paging(2, 2));
         assertEquals(102, users[0].getEmployeeID());
         assertEquals(103, users[1].getEmployeeID());
+    }
+    
+    @Test
+    public void findByLastNamePagingSecondTest() {
+        UserRepository repository = StormRepository.newInstance(UserRepository.class);
+        List<TestUser> users = repository.findByLastName("Ljunggren", new Paging(2, 2));
+        assertEquals(1, users.size());
+        assertEquals(102, users.get(0).getEmployeeID());
+    }
+
+    @Test
+    public void findByLastNamePagingFirstTest() {
+        UserRepository repository = StormRepository.newInstance(UserRepository.class);
+        List<TestUser> users = repository.findByLastName(new Paging(2, 2), "Ljunggren");
+        assertEquals(1, users.size());
+        assertEquals(102, users.get(0).getEmployeeID());
     }
 
     @Test
