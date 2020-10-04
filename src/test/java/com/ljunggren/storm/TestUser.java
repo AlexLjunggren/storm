@@ -18,5 +18,5 @@ public class TestUser {
     
     @ColumnProperty(name = "employee_id")
     private int employeeID;
-    
+    private TestUser boss;
 }

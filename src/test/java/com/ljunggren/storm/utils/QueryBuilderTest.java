@@ -24,6 +24,7 @@ public class QueryBuilderTest {
         private String name;
         @ColumnProperty(name = "branch_id")
         private int branchId;
+        private Bank headquarters;
         
     }
     
@@ -34,6 +35,7 @@ public class QueryBuilderTest {
         bank.setId(1);
         bank.setName("FirstBank");
         bank.setBranchId(101);
+        bank.setHeadquarters(new Bank());
         return bank;
     }
     
