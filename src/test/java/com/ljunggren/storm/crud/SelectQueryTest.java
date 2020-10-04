@@ -13,6 +13,7 @@ import org.apache.commons.io.IOUtils;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.ljunggren.storm.Paging;
 import com.ljunggren.storm.Peek;
 import com.ljunggren.storm.StormRepository;
 import com.ljunggren.storm.TestUser;
@@ -29,6 +30,9 @@ public class SelectQueryTest {
         
         @Select(sql = "select * from users order by id")
         public TestUser[] fetchAllOrdered();
+        
+        @Select(sql = "select * from users order by id")
+        public TestUser[] fetchAllOrdered(Paging paging);
         
         @Select(sql = "select * from users where id = ?")
         public TestUser findById(int id);
@@ -69,6 +73,14 @@ public class SelectQueryTest {
         UserRepository repository = StormRepository.newInstance(UserRepository.class);
         TestUser[] users = repository.fetchAllOrdered();
         assertTrue(users.length > 0);
+    }
+
+    @Test
+    public void fetchAllOrderedPagingTest() throws Exception {
+        UserRepository repository = StormRepository.newInstance(UserRepository.class);
+        TestUser[] users = repository.fetchAllOrdered(new Paging(2, 2));
+        assertEquals(102, users[0].getEmployeeID());
+        assertEquals(103, users[1].getEmployeeID());
     }
 
     @Test

@@ -122,7 +122,26 @@ repository.count();
 Output: select count(*) from users
 ```
 
-## TODO ##
+## Paging ##
 
-- Add paging
+Add Paging to @Select
+
+```java
+new Paging(page, rows);
+```
+
+- page: Page to query (index starting at 1)
+- rows: Number or rows / results to return
+
+```java
+@Database(context = "H2")
+private interface UserRepository  {
+    @Select(sql = "select * from users order by id")
+    public User[] fetchAllOrdered(Paging paging);
+    ...
+}
+
+User[] users = repository.fetchAllOrdered(new Paging(2, 2));
+
+```
 

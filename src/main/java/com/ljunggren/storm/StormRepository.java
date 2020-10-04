@@ -54,7 +54,7 @@ public class StormRepository implements InvocationHandler {
 
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-        if (method.getName().equals("peek")) {
+        if (method.getDeclaringClass() == Peek.class) {
             return peek(proxy, args);
         }
         Iterator<Annotation> annotations = Arrays.stream(method.getAnnotations()).iterator();

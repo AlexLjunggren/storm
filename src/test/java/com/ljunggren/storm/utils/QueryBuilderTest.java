@@ -5,6 +5,7 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
+import com.ljunggren.storm.Paging;
 import com.ljunggren.storm.annotation.entity.ColumnProperty;
 import com.ljunggren.storm.annotation.entity.Id;
 import com.ljunggren.storm.annotation.entity.Table;
@@ -35,7 +36,27 @@ public class QueryBuilderTest {
         bank.setBranchId(101);
         return bank;
     }
+    
+    @Test
+    public void buildPagingSQLTest() {
+        QueryBuilder queryBuilder = new QueryBuilder();
+        String sql = "select * from banks";
+        Paging paging = new Paging(2, 2);
+        String generatedSQL = queryBuilder.buildPagingSQL(sql, paging);
+        String expectedSQL = "select * from banks offset 2 rows fetch next 2 rows only";
+        assertEquals(expectedSQL, generatedSQL);
+    }
 
+    @Test
+    public void getPagingArgsTest() {
+        QueryBuilder queryBuilder = new QueryBuilder();
+        Paging paging = new Paging(2, 2);
+        Object[] args = new Object[] {paging, "FirstBank"};
+        Object[] pagingArgs = queryBuilder.getPagingArgs(args);
+        assertEquals(1, pagingArgs.length);
+        assertEquals("FirstBank", pagingArgs[0]);
+    }
+    
     @Test
     public void buildInsertSQLTest() {
         QueryBuilder queryBuilder = new QueryBuilder(createBank());

@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.ljunggren.storm.Paging;
 import com.ljunggren.storm.annotation.entity.ColumnProperty;
 import com.ljunggren.storm.annotation.entity.Id;
 import com.ljunggren.storm.annotation.entity.Table;
@@ -19,14 +20,28 @@ public class QueryBuilder {
     private List<Field> fields;
     private Field idField;
     
+    public static final String PAGING = "%s offset %d rows fetch next %d rows only";
     public static final String INSERT = "insert into %s (%s) values (%s)";
     public static final String UPDATE = "update %s set %s where %s = ?";
     public static final String DELETE = "delete from %s where %s = ?";
+    
+    public QueryBuilder() {}
     
     public QueryBuilder(Object object) {
         this.object = object;
         this.fields = ReflectionUtils.getObjectFields(object.getClass());
         this.idField = findIdField(fields);
+    }
+    
+    public String buildPagingSQL(String sql, Paging paging) {
+        int page = paging.getPage() - 1;
+        int rows = paging.getRows();
+        int offset = page * rows;
+        return String.format(PAGING, sql, offset, rows);
+    }
+    
+    public Object[] getPagingArgs(Object[] args) {
+        return Arrays.stream(args).filter(arg -> arg.getClass() != Paging.class).toArray();
     }
 
     public String buildInsertSQL() {
