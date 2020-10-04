@@ -18,6 +18,7 @@ import com.ljunggren.storm.crud.QueryChain;
 import com.ljunggren.storm.crud.SelectQuery;
 import com.ljunggren.storm.crud.UpdateQuery;
 import com.ljunggren.storm.exceptions.StormException;
+import com.ljunggren.storm.utils.AnnotationUtils;
 
 public class StormRepository implements InvocationHandler {
     
@@ -36,12 +37,8 @@ public class StormRepository implements InvocationHandler {
     }
     
     private Context getContextFromClass(Class<?> clazz) {
-        Annotation[] annotations = clazz.getAnnotations();
-        Database connection = (Database) Arrays.stream(annotations)
-                .filter(annotation -> annotation.annotationType() == Database.class)
-                .findFirst()
-                .orElse(null);
-        return createContext(connection);
+        Database database = AnnotationUtils.getAnnotationFromClass(Database.class, clazz);
+        return createContext(database);
     }
     
     private Context createContext(Database connection) {

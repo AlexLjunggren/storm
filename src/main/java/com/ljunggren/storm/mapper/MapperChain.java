@@ -1,18 +1,17 @@
 package com.ljunggren.storm.mapper;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.lang3.reflect.FieldUtils;
 
 import com.ljunggren.storm.annotation.entity.ColumnProperty;
+import com.ljunggren.storm.utils.AnnotationUtils;
 import com.ljunggren.storm.utils.ReflectionUtils;
 
 public abstract class MapperChain {
@@ -82,7 +81,9 @@ public abstract class MapperChain {
     }
     
     protected Field findFieldByName(List<Field> fields, String name) {
-        return fields.stream().filter(field -> isFieldByName(field, name) || isFieldByAnnotation(field, name))
+        return fields.stream()
+                .filter(field -> !AnnotationUtils.isTransient(field))
+                .filter(field -> isFieldByName(field, name) || isFieldByAnnotation(field, name))
                 .findFirst()
                 .orElse(null);
     }
@@ -92,11 +93,7 @@ public abstract class MapperChain {
     }
     
     private boolean isFieldByAnnotation(Field field, String name) {
-        Annotation[] annotations = field.getAnnotations();
-        Annotation columnPropery = Arrays.stream(annotations)
-                .filter(annotation -> annotation.annotationType() == ColumnProperty.class)
-                .findFirst()
-                .orElse(null);
+        ColumnProperty columnPropery = AnnotationUtils.getAnnotationFromField(ColumnProperty.class, field);
         return columnPropery == null ? false : ((ColumnProperty) columnPropery).name().toLowerCase().equals(name.toLowerCase());
     }
     
