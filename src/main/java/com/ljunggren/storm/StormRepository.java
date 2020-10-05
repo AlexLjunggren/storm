@@ -12,6 +12,7 @@ import java.util.function.Consumer;
 import com.ljunggren.storm.annotation.Database;
 import com.ljunggren.storm.context.Context;
 import com.ljunggren.storm.context.ContextFactory;
+import com.ljunggren.storm.crud.CatchAllQuery;
 import com.ljunggren.storm.crud.DeleteQuery;
 import com.ljunggren.storm.crud.InsertQuery;
 import com.ljunggren.storm.crud.QueryChain;
@@ -75,8 +76,9 @@ public class StormRepository implements InvocationHandler {
         return new SelectQuery(peek).nextChain(
                 new DeleteQuery(peek).nextChain(
                 new UpdateQuery(peek).nextChain(
-                new InsertQuery(peek)
-                        )));
+                new InsertQuery(peek).nextChain(
+                new CatchAllQuery()
+                        ))));
     }
     
     @SuppressWarnings("unchecked")

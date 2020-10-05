@@ -27,6 +27,12 @@ public class AnnotationUtilsTest {
         private int id;
         
     }
+    
+    @Test
+    public void instantiationTest() {
+        AnnotationUtils annotationUtils = new AnnotationUtils();
+        assertTrue(annotationUtils instanceof AnnotationUtils);
+    }
 
     @Test
     public void findFieldByAnnotationTest() {

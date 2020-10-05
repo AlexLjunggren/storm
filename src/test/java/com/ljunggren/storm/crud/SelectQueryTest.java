@@ -18,7 +18,7 @@ import com.ljunggren.storm.Peek;
 import com.ljunggren.storm.StormRepository;
 import com.ljunggren.storm.TestUser;
 import com.ljunggren.storm.annotation.Database;
-import com.ljunggren.storm.annotation.Select;
+import com.ljunggren.storm.annotation.crud.Select;
 import com.ljunggren.storm.context.Context;
 import com.ljunggren.storm.context.ContextFactory;
 import com.ljunggren.storm.exceptions.StormException;

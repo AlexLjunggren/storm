@@ -1,4 +1,4 @@
-package com.ljunggren.storm.annotation;
+package com.ljunggren.storm.annotation.crud;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -7,8 +7,8 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
-public @interface Insert {
+public @interface Select {
 
-    String sql() default "";
+    String sql();
     
 }

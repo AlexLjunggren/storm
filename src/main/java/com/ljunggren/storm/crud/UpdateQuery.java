@@ -6,7 +6,7 @@ import java.util.Arrays;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
-import com.ljunggren.storm.annotation.Update;
+import com.ljunggren.storm.annotation.crud.Update;
 import com.ljunggren.storm.context.Context;
 import com.ljunggren.storm.utils.ExceptionUtils;
 import com.ljunggren.storm.utils.QueryBuilder;

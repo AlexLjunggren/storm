@@ -6,7 +6,7 @@ import java.util.Arrays;
 import java.util.function.Consumer;
 
 import com.ljunggren.storm.Paging;
-import com.ljunggren.storm.annotation.Select;
+import com.ljunggren.storm.annotation.crud.Select;
 import com.ljunggren.storm.context.Context;
 import com.ljunggren.storm.utils.QueryBuilder;
 

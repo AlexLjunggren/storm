@@ -3,7 +3,7 @@ package com.ljunggren.storm;
 import java.util.List;
 
 import com.ljunggren.storm.annotation.Database;
-import com.ljunggren.storm.annotation.Select;
+import com.ljunggren.storm.annotation.crud.Select;
 
 @Database(context = "H2")
 public interface TestUserRepository {
