@@ -29,7 +29,7 @@ public class InsertQuery extends QueryChain {
     }
     
     private int executeNonNativeQuery(Context context, Object[] args, Type returnType) {
-        return Arrays.stream(args).map(ExceptionUtils.rethrowFunction(arg ->executeNonNativeQuery(context, arg, returnType)))
+        return Arrays.stream(args).map(ExceptionUtils.rethrowFunction(arg -> executeNonNativeQuery(context, arg, returnType)))
                 .collect(Collectors.summingInt(Integer::intValue));
     }
     
