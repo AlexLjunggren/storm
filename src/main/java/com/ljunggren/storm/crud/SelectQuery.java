@@ -7,8 +7,9 @@ import java.util.function.Consumer;
 
 import com.ljunggren.storm.Paging;
 import com.ljunggren.storm.annotation.crud.Select;
+import com.ljunggren.storm.builders.PagingQueryBuilder;
+import com.ljunggren.storm.builders.QueryBuilder;
 import com.ljunggren.storm.context.Context;
-import com.ljunggren.storm.utils.QueryBuilder;
 
 public class SelectQuery extends QueryChain {
     
@@ -36,9 +37,9 @@ public class SelectQuery extends QueryChain {
     }
     
     private Object executePagedQuery(String sql, Context context, Object[] args, Type returnType, Paging paging) throws Exception {
-        QueryBuilder queryBuilder = new QueryBuilder();
-        String pagingSQL = queryBuilder.buildPagingSQL(sql, paging);
-        Object[] generatedArgs = queryBuilder.getPagingArgs(args);
+        QueryBuilder queryBuilder = new PagingQueryBuilder(sql, args, paging);
+        String pagingSQL = queryBuilder.buildSQL();
+        Object[] generatedArgs = queryBuilder.getArgs();
         return executeQuery(pagingSQL, context, generatedArgs, returnType);
     }
     

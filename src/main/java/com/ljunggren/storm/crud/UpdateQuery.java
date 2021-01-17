@@ -7,9 +7,10 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import com.ljunggren.storm.annotation.crud.Update;
+import com.ljunggren.storm.builders.QueryBuilder;
+import com.ljunggren.storm.builders.UpdateQueryBuilder;
 import com.ljunggren.storm.context.Context;
 import com.ljunggren.storm.utils.ExceptionUtils;
-import com.ljunggren.storm.utils.QueryBuilder;
 import com.ljunggren.storm.utils.ReflectionUtils;
 
 public class UpdateQuery extends QueryChain {
@@ -36,9 +37,9 @@ public class UpdateQuery extends QueryChain {
         if (ReflectionUtils.isArray(arg.getClass())) {
             return executeNonNativeQuery(context, (Object[]) arg, returnType);
         }
-        QueryBuilder queryBuilder = new QueryBuilder(arg);
-        String sql = queryBuilder.buildUpdateSQL();
-        Object[] generatedArgs = queryBuilder.getUpdateArgs();
+        QueryBuilder queryBuilder = new UpdateQueryBuilder(arg);
+        String sql = queryBuilder.buildSQL();
+        Object[] generatedArgs = queryBuilder.getArgs();
         return executeUpdate(sql, context, generatedArgs, returnType);
     }
     

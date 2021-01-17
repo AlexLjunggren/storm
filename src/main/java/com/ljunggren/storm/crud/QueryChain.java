@@ -7,6 +7,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.function.Consumer;
+import java.util.stream.IntStream;
 
 import com.ljunggren.storm.context.Context;
 import com.ljunggren.storm.mapper.ResultSetMapper;
@@ -57,6 +58,27 @@ public abstract class QueryChain {
             if (peek != null) {
                 peek.accept(preparedStatement.toString());
             }
+            closeConnection(connection);
+        }
+    }
+    
+    protected int executeBatch(String sql, Context context, Object[] argsArray, Type returnType) throws SQLException {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        try {
+            connection = context.getConnection();
+            preparedStatement = connection.prepareStatement(sql);
+            for (Object args: argsArray) {
+                // TODO: Refactor so args does not have to be cast to array
+                setParameters(preparedStatement, (Object[]) args);
+                preparedStatement.addBatch();
+                if (peek != null) {
+                    peek.accept(preparedStatement.toString());
+                }
+            }
+            int[] updates = preparedStatement.executeBatch();
+            return IntStream.of(updates).sum();
+        } finally {
             closeConnection(connection);
         }
     }

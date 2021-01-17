@@ -4,6 +4,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Stream;
@@ -90,6 +91,10 @@ public class ReflectionUtils {
                 .allMatch(constructor -> constructor.getParameterCount() == 0);
     }
     
+    public static boolean isCollection(Class<?> clazz) {
+        return Collection.class.isAssignableFrom(clazz);
+    }
+
     public static Object getFieldValue(Field field, Object target) throws IllegalAccessException {
         return FieldUtils.readField(field, target, true);
     }

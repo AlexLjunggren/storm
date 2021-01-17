@@ -105,6 +105,16 @@ public int insertAll(User... users);
 public int insert(String firstName, String lastName, int employeeID);
 ```
 
+Insert Batch
+
+```java
+@InsertBatch
+public int insert(User... users);
+        
+@InsertBatch
+public int insert(List<User> users);
+```
+
 ## Peek ##
 
 Peek at SQL statement

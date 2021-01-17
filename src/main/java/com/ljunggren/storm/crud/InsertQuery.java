@@ -2,15 +2,15 @@ package com.ljunggren.storm.crud;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
-import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import com.ljunggren.storm.annotation.crud.Insert;
+import com.ljunggren.storm.builders.InsertQueryBuilder;
+import com.ljunggren.storm.builders.QueryBuilder;
 import com.ljunggren.storm.context.Context;
 import com.ljunggren.storm.utils.ExceptionUtils;
-import com.ljunggren.storm.utils.QueryBuilder;
 import com.ljunggren.storm.utils.ReflectionUtils;
 
 public class InsertQuery extends QueryChain {
@@ -33,13 +33,13 @@ public class InsertQuery extends QueryChain {
                 .collect(Collectors.summingInt(Integer::intValue));
     }
     
-    private int executeNonNativeQuery(Context context, Object arg, Type returnType) throws SQLException {
+    private int executeNonNativeQuery(Context context, Object arg, Type returnType) throws Exception {
         if (ReflectionUtils.isArray(arg.getClass())) {
             return executeNonNativeQuery(context, (Object[]) arg, returnType);
         }
-        QueryBuilder queryBuilder = new QueryBuilder(arg);
-        String sql = queryBuilder.buildInsertSQL();
-        Object[] generatedArgs = queryBuilder.getInsertArgs();
+        QueryBuilder queryBuilder = new InsertQueryBuilder(arg);
+        String sql = queryBuilder.buildSQL();
+        Object[] generatedArgs = queryBuilder.getArgs();
         return executeUpdate(sql, context, generatedArgs, returnType);
     }
     

@@ -3,6 +3,7 @@ package com.ljunggren.storm.utils;
 import static org.junit.Assert.*;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.List;
@@ -275,6 +276,14 @@ public class ReflectionUtilsTest {
         Field field = ReflectionUtilsTest.class.getDeclaredField("string");
         Type fieldType = field.getGenericType();
         assertFalse(ReflectionUtils.hasNoArgsContrustor((Class<?>) fieldType));
+    }
+    
+    @Test
+    public void isCollectionTest() throws NoSuchFieldException, SecurityException {
+        Field field = ReflectionUtilsTest.class.getDeclaredField("stringList");
+        Type fieldType = ((ParameterizedType) field.getGenericType()).getRawType();
+        Class<?> clazz = ((Class<?>) fieldType);
+        assertTrue(ReflectionUtils.isCollection(clazz));
     }
     
     @Test

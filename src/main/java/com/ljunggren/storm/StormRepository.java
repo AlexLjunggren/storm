@@ -6,6 +6,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.lang.reflect.Type;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.function.Consumer;
 
@@ -14,12 +15,14 @@ import com.ljunggren.storm.context.Context;
 import com.ljunggren.storm.context.ContextFactory;
 import com.ljunggren.storm.crud.CatchAllQuery;
 import com.ljunggren.storm.crud.DeleteQuery;
+import com.ljunggren.storm.crud.InsertBatchQuery;
 import com.ljunggren.storm.crud.InsertQuery;
 import com.ljunggren.storm.crud.QueryChain;
 import com.ljunggren.storm.crud.SelectQuery;
 import com.ljunggren.storm.crud.UpdateQuery;
 import com.ljunggren.storm.exceptions.StormException;
 import com.ljunggren.storm.utils.AnnotationUtils;
+import com.ljunggren.storm.utils.ReflectionUtils;
 
 public class StormRepository implements InvocationHandler {
     
@@ -57,11 +60,25 @@ public class StormRepository implements InvocationHandler {
         }
         Iterator<Annotation> annotations = Arrays.stream(method.getAnnotations()).iterator();
         Type returnType = method.getGenericReturnType();
+        Object[] ArgsAsArrays = convertCollectionsToArray(args);
         try {
-            return execute(annotations, args, returnType);
+            return execute(annotations, ArgsAsArrays, returnType);
         } catch (Exception e) {
             throw new StormException(e.getMessage());
         }
+    }
+    
+    @SuppressWarnings("rawtypes")
+    private Object[] convertCollectionsToArray(Object[] args) {
+        if (args == null) {
+            return null;
+        }
+        return Arrays.stream(args).map(arg -> {
+            if (ReflectionUtils.isCollection(arg.getClass())) {
+                return ((Collection) arg).toArray();
+            }
+            return arg;
+        }).toArray();
     }
     
     private Object execute(Iterator<Annotation> annotations, Object[] args, Type returnType) throws Exception {
@@ -77,8 +94,9 @@ public class StormRepository implements InvocationHandler {
                 new DeleteQuery(peek).nextChain(
                 new UpdateQuery(peek).nextChain(
                 new InsertQuery(peek).nextChain(
+                new InsertBatchQuery(peek).nextChain(
                 new CatchAllQuery()
-                        ))));
+                        )))));
     }
     
     @SuppressWarnings("unchecked")
