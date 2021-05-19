@@ -9,8 +9,6 @@ import com.ljunggren.storm.annotation.entity.ColumnProperty;
 import com.ljunggren.storm.annotation.entity.Id;
 import com.ljunggren.storm.annotation.entity.Table;
 import com.ljunggren.storm.annotation.entity.Transient;
-import com.ljunggren.storm.builders.InsertQueryBuilder;
-import com.ljunggren.storm.builders.QueryBuilder;
 import com.ljunggren.storm.entity.Generated;
 
 import lombok.Data;
