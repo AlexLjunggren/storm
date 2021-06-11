@@ -41,7 +41,7 @@ List<User> users = repository.fetchAll();
 Entity Mapping
 
 ```java
-@Table(name = "users")
+@Table("users")
 public class User {
 
     @Id(generated = Generated.AUTO)

@@ -16,7 +16,7 @@ import lombok.Data;
 public class InsertQueryBuilderTest {
 
     @Data
-    @Table(name = "banks")
+    @Table("banks")
     private class Bank {
 
         @Id(generated = Generated.AUTO)

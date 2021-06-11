@@ -8,7 +8,7 @@ import com.ljunggren.storm.entity.Generated;
 import lombok.Data;
 
 @Data
-@Table(name = "users")
+@Table("users")
 public class TestUser {
 
     @Id(generated = Generated.AUTO)

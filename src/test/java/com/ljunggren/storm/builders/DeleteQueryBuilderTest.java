@@ -16,7 +16,7 @@ import lombok.Data;
 public class DeleteQueryBuilderTest {
 
     @Data
-    @Table(name = "banks")
+    @Table("banks")
     private class Bank {
 
         @Id(generated = Generated.AUTO)

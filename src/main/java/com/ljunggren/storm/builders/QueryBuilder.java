@@ -17,7 +17,7 @@ public abstract class QueryBuilder {
     
     protected String getTableName(Class<?> clazz) {
         Table table = AnnotationUtils.getAnnotationFromClass(Table.class, clazz);
-        return table == null ? null : table.name();
+        return table == null ? null : table.value();
     }
     
     protected List<String> getColumnNames(List<Field> fields) {
