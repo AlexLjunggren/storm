@@ -120,7 +120,7 @@ public int insert(List<User> users);
 Peek at SQL statement
 
 ```java
-@Database(context = "H2")
+@Database("H2")
 private interface UserRepository extends Peek<UserRepository> {
     ...
 }
@@ -146,7 +146,7 @@ new Paging(page, rows);
 - rows: Number or rows / results to return
 
 ```java
-@Database(context = "H2")
+@Database("H2")
 private interface UserRepository  {
 
     @Select(sql = "select * from users order by id")
