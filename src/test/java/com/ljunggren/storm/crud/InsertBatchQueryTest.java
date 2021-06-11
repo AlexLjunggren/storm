@@ -24,7 +24,7 @@ import com.ljunggren.storm.context.ContextFactory;
 
 public class InsertBatchQueryTest {
 
-    @Database(context = "H2")
+    @Database("H2")
     private interface UserRepository extends Peek<UserRepository> {
         
         @InsertBatch

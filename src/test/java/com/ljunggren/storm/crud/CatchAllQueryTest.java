@@ -18,7 +18,7 @@ public class CatchAllQueryTest {
     @Target(ElementType.METHOD)
     public @interface NonCrud {}
 
-    @Database(context = "H2")
+    @Database("H2")
     private interface UserRepository {
         
         @NonCrud

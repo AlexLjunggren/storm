@@ -22,7 +22,7 @@ import com.ljunggren.storm.exceptions.StormException;
 
 public class DeleteQueryTest {
 
-    @Database(context = "H2")
+    @Database("H2")
     private interface UserRepository extends Peek<UserRepository> {
         
         @Delete(sql = "delete from users where id = ?")

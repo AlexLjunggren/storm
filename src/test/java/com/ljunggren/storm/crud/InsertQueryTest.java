@@ -22,7 +22,7 @@ import com.ljunggren.storm.exceptions.StormException;
 
 public class InsertQueryTest {
 
-    @Database(context = "H2")
+    @Database("H2")
     private interface UserRepository extends Peek<UserRepository> {
         
         @Insert(sql = "insert into users (firstname, lastname, employee_id) values (?, ?, ?)")

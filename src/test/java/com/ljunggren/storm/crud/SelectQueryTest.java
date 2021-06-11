@@ -25,7 +25,7 @@ import com.ljunggren.storm.exceptions.StormException;
 
 public class SelectQueryTest {
 
-    @Database(context = "H2")
+    @Database("H2")
     private interface UserRepository extends Peek<UserRepository> {
         
         @Select(sql = "select * from users order by id")

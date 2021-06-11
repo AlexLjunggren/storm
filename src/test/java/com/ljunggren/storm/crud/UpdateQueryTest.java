@@ -22,7 +22,7 @@ import com.ljunggren.storm.exceptions.StormException;
 
 public class UpdateQueryTest {
 
-    @Database(context = "H2")
+    @Database("H2")
     private interface UserRepository extends Peek<UserRepository> {
         
         @Update(sql = "update users set firstname = ? where id = ?")

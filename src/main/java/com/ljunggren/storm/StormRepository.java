@@ -49,7 +49,7 @@ public class StormRepository implements InvocationHandler {
         if (connection == null) {
             return null;
         }
-        String name = connection.context();
+        String name = connection.value();
         return new ContextFactory().getContext(name);
     }
 

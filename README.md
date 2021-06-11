@@ -19,7 +19,7 @@ Context
 Interface
 
 ```java
-@Database(context = "H2")
+@Database("H2")
 private interface UserRepository {
         
     @Select(sql = "select * from users")
