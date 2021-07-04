@@ -35,8 +35,7 @@ public class ReflectionUtils {
     }
     
     public static List<Field> getObjectFields(Class<?> clazz) {
-        Field[] fields = FieldUtils.getAllFields(clazz);
-        return Arrays.asList(fields);
+        return FieldUtils.getAllFieldsList(clazz);
     }
     
     public static boolean isPrimitive(Type type) {
