@@ -1,6 +1,7 @@
 package com.ljunggren.storm.utils;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -8,6 +9,7 @@ import java.util.List;
 
 import org.junit.Test;
 
+import com.ljunggren.reflectionUtils.ReflectionUtils;
 import com.ljunggren.storm.TestUser;
 import com.ljunggren.storm.annotation.Database;
 import com.ljunggren.storm.annotation.entity.Id;

@@ -7,7 +7,7 @@ import java.sql.ResultSet;
 import java.util.Arrays;
 import java.util.List;
 
-import com.ljunggren.storm.utils.ReflectionUtils;
+import com.ljunggren.reflectionUtils.ReflectionUtils;
 
 public class ArrayMapper extends MapperChain {
 

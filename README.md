@@ -172,3 +172,7 @@ public findByLastName(String lastName, Paging paging);
 ## TODO ##
 
 1. Handle embedded objects & parameterized objects on insert, delete, update
+
+## Dependencies ##
+
+- reflection-utils

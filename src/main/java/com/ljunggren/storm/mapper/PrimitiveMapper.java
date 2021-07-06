@@ -3,7 +3,7 @@ package com.ljunggren.storm.mapper;
 import java.lang.reflect.Type;
 import java.sql.ResultSet;
 
-import com.ljunggren.storm.utils.ReflectionUtils;
+import com.ljunggren.reflectionUtils.ReflectionUtils;
 
 public class PrimitiveMapper extends MapperChain {
 

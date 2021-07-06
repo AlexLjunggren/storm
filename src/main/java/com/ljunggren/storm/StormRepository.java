@@ -10,6 +10,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.function.Consumer;
 
+import com.ljunggren.reflectionUtils.ReflectionUtils;
 import com.ljunggren.storm.annotation.Database;
 import com.ljunggren.storm.context.Context;
 import com.ljunggren.storm.context.ContextFactory;
@@ -22,7 +23,6 @@ import com.ljunggren.storm.crud.SelectQuery;
 import com.ljunggren.storm.crud.UpdateQuery;
 import com.ljunggren.storm.exceptions.StormException;
 import com.ljunggren.storm.utils.AnnotationUtils;
-import com.ljunggren.storm.utils.ReflectionUtils;
 
 public class StormRepository implements InvocationHandler {
     

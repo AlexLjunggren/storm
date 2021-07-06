@@ -3,9 +3,9 @@ package com.ljunggren.storm.builders;
 import java.lang.reflect.Field;
 import java.util.List;
 
+import com.ljunggren.reflectionUtils.ReflectionUtils;
 import com.ljunggren.storm.annotation.entity.Id;
 import com.ljunggren.storm.utils.AnnotationUtils;
-import com.ljunggren.storm.utils.ReflectionUtils;
 
 public class DeleteQueryBuilder extends QueryBuilder {
 

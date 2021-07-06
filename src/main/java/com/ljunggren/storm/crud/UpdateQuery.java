@@ -6,12 +6,12 @@ import java.util.Arrays;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
+import com.ljunggren.reflectionUtils.ReflectionUtils;
 import com.ljunggren.storm.annotation.crud.Update;
 import com.ljunggren.storm.builders.QueryBuilder;
 import com.ljunggren.storm.builders.UpdateQueryBuilder;
 import com.ljunggren.storm.context.Context;
 import com.ljunggren.storm.utils.ExceptionUtils;
-import com.ljunggren.storm.utils.ReflectionUtils;
 
 public class UpdateQuery extends QueryChain {
     
