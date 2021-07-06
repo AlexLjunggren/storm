@@ -6,10 +6,10 @@ import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.ljunggren.reflectionUtils.ReflectionUtils;
 import com.ljunggren.storm.annotation.entity.Id;
 import com.ljunggren.storm.utils.AnnotationUtils;
 import com.ljunggren.storm.utils.ExceptionUtils;
-import com.ljunggren.storm.utils.ReflectionUtils;
 
 public class UpdateQueryBuilder extends QueryBuilder {
 

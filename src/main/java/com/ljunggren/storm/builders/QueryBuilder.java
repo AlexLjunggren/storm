@@ -5,10 +5,10 @@ import java.lang.reflect.Field;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.ljunggren.reflectionUtils.ReflectionUtils;
 import com.ljunggren.storm.annotation.entity.ColumnProperty;
 import com.ljunggren.storm.annotation.entity.Table;
 import com.ljunggren.storm.utils.AnnotationUtils;
-import com.ljunggren.storm.utils.ReflectionUtils;
 
 public abstract class QueryBuilder {
 

@@ -6,7 +6,7 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.ljunggren.storm.utils.ReflectionUtils;
+import com.ljunggren.reflectionUtils.ReflectionUtils;
 
 public class ListMapper extends MapperChain {
 

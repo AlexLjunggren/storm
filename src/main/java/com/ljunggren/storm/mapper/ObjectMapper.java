@@ -5,7 +5,7 @@ import java.lang.reflect.Type;
 import java.sql.ResultSet;
 import java.util.List;
 
-import com.ljunggren.storm.utils.ReflectionUtils;
+import com.ljunggren.reflectionUtils.ReflectionUtils;
 
 public class ObjectMapper extends MapperChain {
 

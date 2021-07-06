@@ -7,7 +7,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.ljunggren.storm.utils.ReflectionUtils;
+import com.ljunggren.reflectionUtils.ReflectionUtils;
 
 public class SetMapper extends MapperChain {
 
