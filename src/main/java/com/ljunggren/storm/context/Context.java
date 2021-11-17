@@ -28,9 +28,9 @@ public class Context {
             Class.forName(driver);
             return DriverManager.getConnection(url, username, password);
         } catch (ClassNotFoundException e1) {
-            throw new ContextException(String.format("Counld not load driver %s", driver));
+            throw new ContextException(String.format("Could not load driver %s", driver));
         } catch (SQLException e) {
-            throw new ContextException(String.format("Counld not connect to %s", url));
+            throw new ContextException(String.format("Could not connect to %s", url));
         }
      }
     

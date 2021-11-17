@@ -9,7 +9,7 @@ public class PrimitiveMapper extends MapperChain {
 
     @Override
     public Object map(ResultSet resultSet, Type returnType) throws Exception {
-        if (ReflectionUtils.isPrimitive(returnType) || ReflectionUtils.isString(returnType)) {
+        if (ReflectionUtils.isPrimitive(returnType) || ReflectionUtils.isString(returnType) || ReflectionUtils.isNumber(returnType)) {
             Class<?> clazz = getClassFromType(returnType);
             return map(resultSet, clazz);
         }

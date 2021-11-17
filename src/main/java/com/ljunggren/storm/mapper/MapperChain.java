@@ -40,7 +40,7 @@ public abstract class MapperChain {
     }
     
     protected Object mapToObject(ResultSet resultSet, Class<?> clazz, List<Field> fields) throws SQLException, IllegalAccessException, InstantiationException {
-        if (ReflectionUtils.isPrimitive(clazz) || ReflectionUtils.isString(clazz)) {
+        if (ReflectionUtils.isPrimitive(clazz) || ReflectionUtils.isString(clazz) || ReflectionUtils.isNumber(clazz)) {
             return mapToPrimitive(resultSet);
         }
         Object object = instantiateObject(clazz);
