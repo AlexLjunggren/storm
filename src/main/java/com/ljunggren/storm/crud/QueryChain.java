@@ -6,6 +6,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Map;
 import java.util.function.Consumer;
 import java.util.stream.IntStream;
 
@@ -27,9 +28,9 @@ public abstract class QueryChain {
         return this;
     }
     
-    public abstract Object execute(Annotation annotation, Context context, Object[] args, Type returnType) throws Exception;
+    public abstract Object execute(Annotation annotation, Context context, Map<String, Object> parameterArgumentMap, Type returnType) throws Exception;
     
-    protected Object executeQuery(String sql, Context context, Object[] args, Type returnType) throws Exception {
+    protected Object executeQuery(String sql, Context context, Map<String, Object> parameterArgumentMap, Type returnType) throws Exception {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         try {
@@ -46,7 +47,7 @@ public abstract class QueryChain {
         }
     }
     
-    protected int executeUpdate(String sql, Context context, Object[] args, Type returnType) throws SQLException {
+    protected int executeUpdate(String sql, Context context, Map<String, Object> parameterArgumentMap, Type returnType) throws SQLException {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         try {
@@ -62,7 +63,7 @@ public abstract class QueryChain {
         }
     }
     
-    protected int executeBatch(String sql, Context context, Object[] argsArray, Type returnType) throws SQLException {
+    protected int executeBatch(String sql, Context context, Map<String, Object> parameterArgumentMap, Type returnType) throws SQLException {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         try {
