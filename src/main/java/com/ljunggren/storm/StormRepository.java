@@ -60,9 +60,9 @@ public class StormRepository implements InvocationHandler {
         }
         Iterator<Annotation> annotations = Arrays.stream(method.getAnnotations()).iterator();
         Type returnType = method.getGenericReturnType();
-        Object[] ArgsAsArrays = convertCollectionsToArray(args);
+        Object[] argsAsArrays = convertCollectionsToArray(args);
         try {
-            return execute(annotations, ArgsAsArrays, returnType);
+            return execute(annotations, argsAsArrays, returnType);
         } catch (Exception e) {
             throw new StormException(e.getMessage());
         }
