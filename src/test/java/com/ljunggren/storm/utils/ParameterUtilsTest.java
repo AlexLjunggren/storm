@@ -41,6 +41,16 @@ public class ParameterUtilsTest {
     }
     
     @Test
+    public void getParameterNamesTest() throws NoSuchMethodException, SecurityException {
+        Method method = DummyClass.class.getMethod("find", int.class, boolean.class);
+        Parameter[] parameters = method.getParameters();
+        String[] parameterNames = ParameterUtils.getParameterNames(parameters);
+        assertEquals(2, parameterNames.length);
+        assertEquals("id", parameterNames[0]);
+        assertEquals("asc", parameterNames[1]);
+    }
+    
+    @Test
     public void findParameterIdsWithOutSpacesTest() {
         String sql = "select * from users where id in (#{id1},#{id2})";
         List<String> parameterIds = ParameterUtils.findParameterIds(sql);
