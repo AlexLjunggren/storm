@@ -14,6 +14,7 @@ import com.ljunggren.storm.Peek;
 import com.ljunggren.storm.StormRepository;
 import com.ljunggren.storm.TestUser;
 import com.ljunggren.storm.annotation.Database;
+import com.ljunggren.storm.annotation.Param;
 import com.ljunggren.storm.annotation.crud.Select;
 import com.ljunggren.storm.annotation.crud.Update;
 import com.ljunggren.storm.context.Context;
@@ -26,7 +27,7 @@ public class UpdateQueryTest {
     private interface UserRepository extends Peek<UserRepository> {
         
         @Update(sql = "update users set firstname = #{firstname} where id = #{id}")
-        public int updateFirstName(String firstname, int id);
+        public int updateFirstName(@Param("firstname") String firstname, @Param("id") int id);
         
         @Update
         public int update(TestUser user);
@@ -38,7 +39,7 @@ public class UpdateQueryTest {
         public int nonsense();
         
         @Select(sql = "select * from users where id = #{id}")
-        public TestUser findById(int id);
+        public TestUser findById(@Param("id") int id);
         
     }
         

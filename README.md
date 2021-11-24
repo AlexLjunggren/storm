@@ -26,7 +26,7 @@ private interface UserRepository {
     public List<User> fetchAll();
         
     @Delete(sql = "delete from users where id = #{id}")
-    public int delete(int id);
+    public int delete(@Param("id") int id);
         
 }
 ```
@@ -76,7 +76,7 @@ public int delete(User user);
 public int deleteAll(User... users);
         
 @Delete(sql = "delete from users where id = #{id}")
-public int deleteById(int id);
+public int deleteById(@Param("id") int id);
 ```
 
 Update
@@ -89,7 +89,7 @@ public int update(User user);
 public int updateAll(User... users);
 
 @Update(sql = "update users set firstname = #{firstname} where id = #{id}")
-public int updateFirstName(String firstname, int id);
+public int updateFirstName(@Param("firstname") String firstname, @Param("id") int id);
 ```
 
 Insert
@@ -102,7 +102,7 @@ public int insert(User user);
 public int insertAll(User... users);
         
 @Insert(sql = "insert into users (firstname, lastname, employee_id) values (#{firstname}, #{lastname}, #{employeeID})")
-public int insert(String firstname, String lastname, int employeeID);
+public int insert(@Param("firstname") String firstname, @Param("lastname") String lastname, @Param("employeeID") int employeeID);
 ```
 
 Insert Batch
@@ -163,20 +163,15 @@ User[] users = repository.fetchAllOrdered(paging);
 
 ```java
 @Select(sql = "select * from users where lastname = #{lastname}")
-public findByLastName(Paging paging, String lastname);
+public findByLastName(Paging paging, @Param("lastname") String lastname);
     // or
-public findByLastName(String lastName, Paging paging);
+public findByLastName(@Param("lastname") String lastname, Paging paging);
 
 ```
 
-## Compiling ##
-
-Compile with debug information
-
-- Eclipse - Window > Preferences > Java > Compiler > Store information about method parameters
-
 ## TODO ##
 
+1. Remove requirement for @Param if only one parameter exists
 1. Handle embedded objects & parameterized objects on insert, delete, update
 
 ## Dependencies ##

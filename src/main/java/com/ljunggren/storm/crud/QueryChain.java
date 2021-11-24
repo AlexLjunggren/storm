@@ -31,7 +31,6 @@ public abstract class QueryChain {
         return this;
     }
     
-    private ParameterUtils parameterUtils = new ParameterUtils();
     
     public abstract Object execute(Annotation annotation, Context context, Parameter[] parameters, Object[] arguments, Type returnType) throws Exception;
     
@@ -93,10 +92,10 @@ public abstract class QueryChain {
     }
         
     private PreparedStatement generatePreparedStatement(Connection connection, String sql, Parameter[] parameters, Object[] arguments) throws SQLException {
-        List<String> parameterIds = parameterUtils.findParameterIds(sql);
-        String preparedSql = parameterUtils.replaceParamaterIdsWithQuestionMarks(sql);
+        List<String> parameterIds = ParameterUtils.findParameterIds(sql);
+        String preparedSql = ParameterUtils.replaceParamaterIdsWithQuestionMarks(sql);
         PreparedStatement preparedStatement = connection.prepareStatement(preparedSql);
-        Map<String, Object> parameterArgumentMap = new ParameterUtils().mapArgumentsToParameterNames(parameters, arguments);
+        Map<String, Object> parameterArgumentMap = ParameterUtils.mapArgumentsToParameterNames(parameters, arguments);
         for (int i = 0; i < parameterIds.size(); i++) {
             preparedStatement.setObject(i + 1, parameterArgumentMap.get(parameterIds.get(i)));
         }
@@ -109,7 +108,7 @@ public abstract class QueryChain {
         PreparedStatement preparedStatement = null;
         try {
             connection = context.getConnection();
-            String preparedSql = parameterUtils.replaceParamaterIdsWithQuestionMarks(sql);
+            String preparedSql = ParameterUtils.replaceParamaterIdsWithQuestionMarks(sql);
             preparedStatement = connection.prepareStatement(preparedSql);
             for (Object args: argsArray) {
                 // TODO: Refactor so args does not have to be cast to array

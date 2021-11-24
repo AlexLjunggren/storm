@@ -14,6 +14,7 @@ import com.ljunggren.storm.Peek;
 import com.ljunggren.storm.StormRepository;
 import com.ljunggren.storm.TestUser;
 import com.ljunggren.storm.annotation.Database;
+import com.ljunggren.storm.annotation.Param;
 import com.ljunggren.storm.annotation.crud.Delete;
 import com.ljunggren.storm.annotation.crud.Select;
 import com.ljunggren.storm.context.Context;
@@ -26,7 +27,7 @@ public class DeleteQueryTest {
     private interface UserRepository extends Peek<UserRepository> {
         
         @Delete(sql = "delete from users where id = #{id}")
-        public int deleteById(int id);
+        public int deleteById(@Param("id") int id);
         
         @Delete
         public int delete(TestUser user);
@@ -41,7 +42,7 @@ public class DeleteQueryTest {
         public long count();
         
         @Select(sql = "select * from users where id = #{id}")
-        public TestUser findById(int id);
+        public TestUser findById(@Param("id") int id);
         
     }
     

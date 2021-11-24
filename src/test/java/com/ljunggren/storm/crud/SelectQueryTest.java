@@ -18,6 +18,7 @@ import com.ljunggren.storm.Peek;
 import com.ljunggren.storm.StormRepository;
 import com.ljunggren.storm.TestUser;
 import com.ljunggren.storm.annotation.Database;
+import com.ljunggren.storm.annotation.Param;
 import com.ljunggren.storm.annotation.crud.Select;
 import com.ljunggren.storm.context.Context;
 import com.ljunggren.storm.context.ContextFactory;
@@ -35,16 +36,16 @@ public class SelectQueryTest {
         public TestUser[] fetchAllOrdered(Paging paging);
         
         @Select(sql = "select * from users where lastname = #{lastname}")
-        public List<TestUser> findByLastName(String lastname, Paging paging);
+        public List<TestUser> findByLastName(@Param("lastname") String lastname, Paging paging);
         
         @Select(sql = "select * from users where lastname = #{lastname}")
-        public List<TestUser> findByLastName(Paging paging, String lastname);
+        public List<TestUser> findByLastName(Paging paging, @Param("lastname") String lastname);
         
         @Select(sql = "select * from users where id = #{id}")
-        public TestUser findById(int id);
+        public TestUser findById(@Param("id") int id);
         
         @Select(sql = "select * from users where firstname = #{firstname} and lastname = #{lastname}")
-        public TestUser findByFirstAndLastName(String firstname, String lastname);
+        public TestUser findByFirstAndLastName(@Param("firstname") String firstname, @Param("lastname") String lastname);
         
         @Select(sql = "select count(*) from users")
         public long count();

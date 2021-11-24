@@ -14,6 +14,7 @@ import com.ljunggren.storm.Peek;
 import com.ljunggren.storm.StormRepository;
 import com.ljunggren.storm.TestUser;
 import com.ljunggren.storm.annotation.Database;
+import com.ljunggren.storm.annotation.Param;
 import com.ljunggren.storm.annotation.crud.Insert;
 import com.ljunggren.storm.annotation.crud.Select;
 import com.ljunggren.storm.context.Context;
@@ -26,7 +27,7 @@ public class InsertQueryTest {
     private interface UserRepository extends Peek<UserRepository> {
         
         @Insert(sql = "insert into users (firstname, lastname, employee_id) values (#{firstname}, #{lastname}, #{employeeID})")
-        public int insert(String firstname, String lastname, int employeeID);
+        public int insert(@Param("firstname") String firstname, @Param("lastname") String lastname, @Param("employeeID") int employeeID);
 
         @Insert
         public int insert(TestUser user);
