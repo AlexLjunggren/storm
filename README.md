@@ -26,8 +26,10 @@ private interface UserRepository {
     public List<User> fetchAll();
         
     @Delete(sql = "delete from users where id = #{id}")
-    public int delete(@Param("id") int id);
+    public int delete(int id);
         
+	@Insert(sql = "insert into users (firstname, lastname, employee_id) values (#{firstname}, #{lastname}, #{employeeID})")
+	public int insert(@Param("firstname") String first, @Param("lastname") String last, @Param("employeeID") int id);
 }
 ```
 
@@ -76,7 +78,7 @@ public int delete(User user);
 public int deleteAll(User... users);
         
 @Delete(sql = "delete from users where id = #{id}")
-public int deleteById(@Param("id") int id);
+public int deleteById(int id);
 ```
 
 Update
@@ -102,7 +104,7 @@ public int insert(User user);
 public int insertAll(User... users);
         
 @Insert(sql = "insert into users (firstname, lastname, employee_id) values (#{firstname}, #{lastname}, #{employeeID})")
-public int insert(@Param("firstname") String firstname, @Param("lastname") String lastname, @Param("employeeID") int employeeID);
+public int insert(@Param("firstname") String first, @Param("lastname") String last, @Param("employeeID") int id);
 ```
 
 Insert Batch
@@ -171,7 +173,6 @@ public findByLastName(@Param("lastname") String lastname, Paging paging);
 
 ## TODO ##
 
-1. Remove requirement for @Param if only one parameter exists
 1. Handle embedded objects & parameterized objects on insert, delete, update
 
 ## Dependencies ##

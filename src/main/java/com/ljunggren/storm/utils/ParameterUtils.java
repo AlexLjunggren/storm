@@ -26,6 +26,7 @@ public class ParameterUtils {
     public static String[] getParameterNames(Parameter[] parameters) {
         return Arrays.stream(parameters)
                 .map(parameter -> getParameterName(parameter))
+                .filter(name -> null != name)
                 .toArray(String[]::new);
     }
     

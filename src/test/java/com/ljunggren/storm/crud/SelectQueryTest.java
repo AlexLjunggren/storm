@@ -42,7 +42,7 @@ public class SelectQueryTest {
         public List<TestUser> findByLastName(Paging paging, @Param("lastname") String lastname);
         
         @Select(sql = "select * from users where id = #{id}")
-        public TestUser findById(@Param("id") int id);
+        public TestUser findById(int id);
         
         @Select(sql = "select * from users where firstname = #{firstname} and lastname = #{lastname}")
         public TestUser findByFirstAndLastName(@Param("firstname") String firstname, @Param("lastname") String lastname);

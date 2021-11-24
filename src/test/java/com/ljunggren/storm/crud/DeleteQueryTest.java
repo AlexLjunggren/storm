@@ -27,7 +27,7 @@ public class DeleteQueryTest {
     private interface UserRepository extends Peek<UserRepository> {
         
         @Delete(sql = "delete from users where id = #{id}")
-        public int deleteById(@Param("id") int id);
+        public int deleteById(int id);
         
         @Delete
         public int delete(TestUser user);

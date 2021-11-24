@@ -39,6 +39,8 @@ public class SelectQuery extends QueryChain {
     }
     
     private Object executePagedQuery(String sql, Context context, Parameter[] parameters, Object[] arguments, Type returnType, Paging paging) throws Exception {
+        parameters = Arrays.stream(parameters).filter(parameter -> parameter.getType() != Paging.class).toArray(Parameter[]::new);
+        arguments = Arrays.stream(arguments).filter(argument -> argument.getClass() != Paging.class).toArray(Object[]::new);
         QueryBuilder queryBuilder = new PagingQueryBuilder(sql, arguments, paging);
         String pagingSQL = queryBuilder.buildSQL();
         return executeQuery(pagingSQL, context, parameters, arguments, returnType);

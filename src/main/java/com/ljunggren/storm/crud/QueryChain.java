@@ -96,6 +96,10 @@ public abstract class QueryChain {
         String preparedSql = ParameterUtils.replaceParamaterIdsWithQuestionMarks(sql);
         PreparedStatement preparedStatement = connection.prepareStatement(preparedSql);
         Map<String, Object> parameterArgumentMap = ParameterUtils.mapArgumentsToParameterNames(parameters, arguments);
+        if (parameterArgumentMap.isEmpty() && parameters.length == 1) {
+            preparedStatement.setObject(1, arguments[0]);
+            return preparedStatement;
+        }
         for (int i = 0; i < parameterIds.size(); i++) {
             preparedStatement.setObject(i + 1, parameterArgumentMap.get(parameterIds.get(i)));
         }
