@@ -1,12 +1,13 @@
 package com.ljunggren.storm.utils;
 
 import java.lang.reflect.Parameter;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 public class ParameterUtils {
     
@@ -18,9 +19,13 @@ public class ParameterUtils {
     }
 
     public List<String> findParameterIds(String sql) {
-        return Stream.of(sql.split(" ")).filter(string -> string.matches(parameterRegex))
-            .map(parameter -> parameter.replace("#{", "").replace("}", ""))
-            .collect(Collectors.toList());
+        List<String> parameterIds = new ArrayList<>();
+        Pattern pattern = Pattern.compile(parameterRegex);
+        Matcher matcher = pattern.matcher(sql);
+        while (matcher.find()) {
+            parameterIds.add(matcher.group(0).replace("#{", "").replace("}", ""));
+        }
+        return parameterIds;
     }
     
     public String replaceParamaterIdsWithQuestionMarks(String sql) {

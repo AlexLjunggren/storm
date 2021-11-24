@@ -25,8 +25,8 @@ public class InsertQueryTest {
     @Database("H2")
     private interface UserRepository extends Peek<UserRepository> {
         
-        @Insert(sql = "insert into users (firstname, lastname, employee_id) values (?, ?, ?)")
-        public int insert(String firstName, String lastName, int employeeID);
+        @Insert(sql = "insert into users (firstname, lastname, employee_id) values (#{firstname}, #{lastname}, #{employeeID})")
+        public int insert(String firstname, String lastname, int employeeID);
 
         @Insert
         public int insert(TestUser user);

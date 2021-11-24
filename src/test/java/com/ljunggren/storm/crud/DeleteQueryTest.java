@@ -25,7 +25,7 @@ public class DeleteQueryTest {
     @Database("H2")
     private interface UserRepository extends Peek<UserRepository> {
         
-        @Delete(sql = "delete from users where id = ?")
+        @Delete(sql = "delete from users where id = #{id}")
         public int deleteById(int id);
         
         @Delete
@@ -40,7 +40,7 @@ public class DeleteQueryTest {
         @Select(sql = "select count(*) from users")
         public long count();
         
-        @Select(sql = "select * from users where id = ?")
+        @Select(sql = "select * from users where id = #{id}")
         public TestUser findById(int id);
         
     }

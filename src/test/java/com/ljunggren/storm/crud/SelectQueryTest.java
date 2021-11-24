@@ -34,17 +34,17 @@ public class SelectQueryTest {
         @Select(sql = "select * from users order by id")
         public TestUser[] fetchAllOrdered(Paging paging);
         
-        @Select(sql = "select * from users where lastname = ?")
-        public List<TestUser> findByLastName(String lastName, Paging paging);
+        @Select(sql = "select * from users where lastname = #{lastname}")
+        public List<TestUser> findByLastName(String lastname, Paging paging);
         
-        @Select(sql = "select * from users where lastname = ?")
-        public List<TestUser> findByLastName(Paging paging, String lastName);
+        @Select(sql = "select * from users where lastname = #{lastname}")
+        public List<TestUser> findByLastName(Paging paging, String lastname);
         
-        @Select(sql = "select * from users where id = ?")
+        @Select(sql = "select * from users where id = #{id}")
         public TestUser findById(int id);
         
-        @Select(sql = "select * from users where firstname = ? and lastname = ?")
-        public TestUser findByFirstAndLastName(String firstName, String lastName);
+        @Select(sql = "select * from users where firstname = #{firstname} and lastname = #{lastname}")
+        public TestUser findByFirstAndLastName(String firstname, String lastname);
         
         @Select(sql = "select count(*) from users")
         public long count();

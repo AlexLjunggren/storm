@@ -3,12 +3,12 @@ package com.ljunggren.storm;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
 import java.lang.reflect.Proxy;
 import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.function.Consumer;
 
 import com.ljunggren.reflectionUtils.ReflectionUtils;
@@ -24,7 +24,6 @@ import com.ljunggren.storm.crud.SelectQuery;
 import com.ljunggren.storm.crud.UpdateQuery;
 import com.ljunggren.storm.exceptions.StormException;
 import com.ljunggren.storm.utils.AnnotationUtils;
-import com.ljunggren.storm.utils.ParameterUtils;
 
 public class StormRepository implements InvocationHandler {
     
@@ -63,9 +62,9 @@ public class StormRepository implements InvocationHandler {
         Iterator<Annotation> annotations = Arrays.stream(method.getAnnotations()).iterator();
         Type returnType = method.getGenericReturnType();
         Object[] argsAsArrays = convertCollectionsToArray(args);
-        Map<String, Object> parameterArgumentMap = new ParameterUtils().mapArgumentsToParameterNames(method.getParameters(), argsAsArrays);
+        Parameter[] parameters = method.getParameters();
         try {
-            return execute(annotations, parameterArgumentMap, returnType);
+            return execute(annotations, parameters, argsAsArrays, returnType);
         } catch (Exception e) {
             throw new StormException(e.getMessage());
         }
@@ -84,10 +83,10 @@ public class StormRepository implements InvocationHandler {
         }).toArray();
     }
     
-    private Object execute(Iterator<Annotation> annotations, Map<String, Object> parameterArgumentMap, Type returnType) throws Exception {
+    private Object execute(Iterator<Annotation> annotations, Parameter[] parameters, Object[] arguments, Type returnType) throws Exception {
         if (annotations.hasNext()) {
-            Object object = getQueryChain().execute(annotations.next(), context, parameterArgumentMap, returnType);
-            return object == null ? execute(annotations, parameterArgumentMap, returnType) : object;
+            Object object = getQueryChain().execute(annotations.next(), context, parameters, arguments, returnType);
+            return object == null ? execute(annotations, parameters, arguments, returnType) : object;
         }
         return null;
     }

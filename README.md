@@ -25,7 +25,7 @@ private interface UserRepository {
     @Select(sql = "select * from users")
     public List<User> fetchAll();
         
-    @Delete(sql = "delete from users where id = ?")
+    @Delete(sql = "delete from users where id = #{id}")
     public int delete(int id);
         
 }
@@ -75,7 +75,7 @@ public int delete(User user);
 @Delete
 public int deleteAll(User... users);
         
-@Delete(sql = "delete from users where id = ?")
+@Delete(sql = "delete from users where id = #{id}")
 public int deleteById(int id);
 ```
 
@@ -88,8 +88,8 @@ public int update(User user);
 @Update
 public int updateAll(User... users);
 
-@Update(sql = "update users set firstname = ? where id = ?")
-public int updateFirstName(String name, int id);
+@Update(sql = "update users set firstname = #{firstname} where id = #{id}")
+public int updateFirstName(String firstname, int id);
 ```
 
 Insert
@@ -101,8 +101,8 @@ public int insert(User user);
 @Insert
 public int insertAll(User... users);
         
-@Insert(sql = "insert into users (firstname, lastname, employee_id) values (?, ?, ?)")
-public int insert(String firstName, String lastName, int employeeID);
+@Insert(sql = "insert into users (firstname, lastname, employee_id) values (#{firstname}, #{lastname}, #{employeeID})")
+public int insert(String firstname, String lastname, int employeeID);
 ```
 
 Insert Batch
@@ -162,12 +162,18 @@ User[] users = repository.fetchAllOrdered(paging);
 ** Note: ** Paging can be passed in at any point in the argument list
 
 ```java
-@Select(sql = "select * from users where lastname = ?")
-public findByLastName(Paging paging, String lastName);
+@Select(sql = "select * from users where lastname = #{lastname}")
+public findByLastName(Paging paging, String lastname);
     // or
 public findByLastName(String lastName, Paging paging);
 
 ```
+
+## Compiling ##
+
+Compile with debug information
+
+- Eclipse - Window > Preferences > Java > Compiler > Store information about method parameters
 
 ## TODO ##
 

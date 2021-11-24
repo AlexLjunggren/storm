@@ -13,7 +13,7 @@ import com.ljunggren.storm.utils.AnnotationUtils;
 public abstract class QueryBuilder {
 
     public abstract String buildSQL();
-    public abstract Object[] getArgs() throws IllegalAccessException ;
+    public abstract Object[] getArgs() throws IllegalAccessException;
     
     protected String getTableName(Class<?> clazz) {
         Table table = AnnotationUtils.getAnnotationFromClass(Table.class, clazz);

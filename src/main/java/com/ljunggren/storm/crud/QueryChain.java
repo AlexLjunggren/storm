@@ -1,17 +1,20 @@
 package com.ljunggren.storm.crud;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Parameter;
 import java.lang.reflect.Type;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 import java.util.stream.IntStream;
 
 import com.ljunggren.storm.context.Context;
 import com.ljunggren.storm.mapper.ResultSetMapper;
+import com.ljunggren.storm.utils.ParameterUtils;
 
 public abstract class QueryChain {
     
@@ -28,15 +31,16 @@ public abstract class QueryChain {
         return this;
     }
     
-    public abstract Object execute(Annotation annotation, Context context, Map<String, Object> parameterArgumentMap, Type returnType) throws Exception;
+    private ParameterUtils parameterUtils = new ParameterUtils();
     
-    protected Object executeQuery(String sql, Context context, Map<String, Object> parameterArgumentMap, Type returnType) throws Exception {
+    public abstract Object execute(Annotation annotation, Context context, Parameter[] parameters, Object[] arguments, Type returnType) throws Exception;
+    
+    protected Object executeQuery(String sql, Context context, Parameter[] parameters, Object[] arguments, Type returnType) throws Exception {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         try {
             connection = context.getConnection();
-            preparedStatement = connection.prepareStatement(sql);
-            setParameters(preparedStatement, args);
+            preparedStatement = generatePreparedStatement(connection, sql, parameters, arguments);
             ResultSet resultSet = preparedStatement.executeQuery();
             return new ResultSetMapper(resultSet, returnType).map();
         } finally {
@@ -47,13 +51,12 @@ public abstract class QueryChain {
         }
     }
     
-    protected int executeUpdate(String sql, Context context, Map<String, Object> parameterArgumentMap, Type returnType) throws SQLException {
+    protected int executeUpdate(String sql, Context context, Object[] arguments, Type returnType) throws SQLException {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         try {
             connection = context.getConnection();
-            preparedStatement = connection.prepareStatement(sql);
-            setParameters(preparedStatement, args);
+            preparedStatement = generatePreparedStatement(connection, sql, arguments);
             return preparedStatement.executeUpdate();
         } finally {
             if (peek != null) {
@@ -63,12 +66,51 @@ public abstract class QueryChain {
         }
     }
     
-    protected int executeBatch(String sql, Context context, Map<String, Object> parameterArgumentMap, Type returnType) throws SQLException {
+    protected int executeUpdate(String sql, Context context, Parameter[] parameters, Object[] arguments, Type returnType) throws SQLException {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         try {
             connection = context.getConnection();
-            preparedStatement = connection.prepareStatement(sql);
+            preparedStatement = generatePreparedStatement(connection, sql, parameters, arguments);
+            return preparedStatement.executeUpdate();
+        } finally {
+            if (peek != null) {
+                peek.accept(preparedStatement.toString());
+            }
+            closeConnection(connection);
+        }
+    }
+    
+    private PreparedStatement generatePreparedStatement(Connection connection, String sql, Object[] arguments) throws SQLException {
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        if (arguments == null) {
+            return preparedStatement;
+        }
+        for (int i = 0; i < arguments.length; i++) {
+            preparedStatement.setObject(i + 1, arguments[i]);
+        }
+        return preparedStatement;
+    }
+        
+    private PreparedStatement generatePreparedStatement(Connection connection, String sql, Parameter[] parameters, Object[] arguments) throws SQLException {
+        List<String> parameterIds = parameterUtils.findParameterIds(sql);
+        String preparedSql = parameterUtils.replaceParamaterIdsWithQuestionMarks(sql);
+        PreparedStatement preparedStatement = connection.prepareStatement(preparedSql);
+        Map<String, Object> parameterArgumentMap = new ParameterUtils().mapArgumentsToParameterNames(parameters, arguments);
+        for (int i = 0; i < parameterIds.size(); i++) {
+            preparedStatement.setObject(i + 1, parameterArgumentMap.get(parameterIds.get(i)));
+        }
+        return preparedStatement;
+    }
+    
+    
+    protected int executeBatch(String sql, Context context, Object[] argsArray, Type returnType) throws SQLException {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        try {
+            connection = context.getConnection();
+            String preparedSql = parameterUtils.replaceParamaterIdsWithQuestionMarks(sql);
+            preparedStatement = connection.prepareStatement(preparedSql);
             for (Object args: argsArray) {
                 // TODO: Refactor so args does not have to be cast to array
                 setParameters(preparedStatement, (Object[]) args);

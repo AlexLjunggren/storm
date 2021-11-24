@@ -41,6 +41,15 @@ public class ParameterUtilsTest {
     }
     
     @Test
+    public void findParameterIdsWithOutSpacesTest() {
+        String sql = "select * from users where id in (#{id1},#{id2})";
+        List<String> parameterIds = parameterUtils.findParameterIds(sql);
+        assertEquals(2, parameterIds.size());
+        assertEquals("id1", parameterIds.get(0));
+        assertEquals("id2", parameterIds.get(1));
+    }
+    
+    @Test
     public void replaceParamaterIdsWithQuestionMarksTest() {
         String sql = "select * from users where id = #{id} and active = #{active}";
         String actual = parameterUtils.replaceParamaterIdsWithQuestionMarks(sql);
