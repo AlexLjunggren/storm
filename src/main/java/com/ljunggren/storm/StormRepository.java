@@ -22,7 +22,7 @@ import com.ljunggren.storm.crud.InsertQuery;
 import com.ljunggren.storm.crud.QueryChain;
 import com.ljunggren.storm.crud.SelectQuery;
 import com.ljunggren.storm.crud.UpdateQuery;
-import com.ljunggren.storm.exceptions.StormException;
+import com.ljunggren.storm.exception.StormException;
 import com.ljunggren.storm.utils.AnnotationUtils;
 
 public class StormRepository implements InvocationHandler {

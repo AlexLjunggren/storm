@@ -7,7 +7,7 @@ import java.sql.SQLException;
 
 import org.junit.Test;
 
-import com.ljunggren.storm.exceptions.ContextException;
+import com.ljunggren.storm.exception.ContextException;
 
 public class ContextTest {
 

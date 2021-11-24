@@ -4,7 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-import com.ljunggren.storm.exceptions.ContextException;
+import com.ljunggren.storm.exception.ContextException;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

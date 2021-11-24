@@ -19,7 +19,7 @@ import com.ljunggren.storm.annotation.crud.Select;
 import com.ljunggren.storm.annotation.crud.Update;
 import com.ljunggren.storm.context.Context;
 import com.ljunggren.storm.context.ContextFactory;
-import com.ljunggren.storm.exceptions.StormException;
+import com.ljunggren.storm.exception.StormException;
 
 public class UpdateQueryTest {
 
