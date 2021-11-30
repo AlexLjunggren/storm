@@ -13,8 +13,9 @@ import java.util.function.Consumer;
 import java.util.stream.IntStream;
 
 import com.ljunggren.storm.context.Context;
+import com.ljunggren.storm.exception.StormException;
 import com.ljunggren.storm.mapper.ResultSetMapper;
-import com.ljunggren.storm.utils.ParameterUtils;
+import com.ljunggren.storm.util.ParameterUtils;
 
 public abstract class QueryChain {
     
@@ -100,6 +101,9 @@ public abstract class QueryChain {
             preparedStatement.setObject(1, arguments[0]);
             return preparedStatement;
         }
+        if (parameterArgumentMap.isEmpty() && parameters.length > 1) {
+            throw new StormException("Multiple Storm parameters must be annotated with @Param");
+        }
         for (int i = 0; i < parameterIds.size(); i++) {
             preparedStatement.setObject(i + 1, parameterArgumentMap.get(parameterIds.get(i)));
         }
@@ -107,16 +111,16 @@ public abstract class QueryChain {
     }
     
     
-    protected int executeBatch(String sql, Context context, Object[] argsArray, Type returnType) throws SQLException {
+    protected int executeBatch(String sql, Context context, Object[] argumentArray, Type returnType) throws SQLException {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         try {
             connection = context.getConnection();
             String preparedSql = ParameterUtils.replaceParamaterIdsWithQuestionMarks(sql);
             preparedStatement = connection.prepareStatement(preparedSql);
-            for (Object args: argsArray) {
+            for (Object arguments: argumentArray) {
                 // TODO: Refactor so args does not have to be cast to array
-                setParameters(preparedStatement, (Object[]) args);
+                setParameters(preparedStatement, (Object[]) arguments);
                 preparedStatement.addBatch();
                 if (peek != null) {
                     peek.accept(preparedStatement.toString());
@@ -128,7 +132,7 @@ public abstract class QueryChain {
             closeConnection(connection);
         }
     }
-
+    
     private void setParameters(PreparedStatement preparedStatement, Object[] args) throws SQLException {
         if (args != null) {
             for (int i = 0; i < args.length; i++) {

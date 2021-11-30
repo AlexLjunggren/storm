@@ -12,7 +12,7 @@ import com.ljunggren.storm.annotation.crud.Insert;
 import com.ljunggren.storm.builders.InsertQueryBuilder;
 import com.ljunggren.storm.builders.QueryBuilder;
 import com.ljunggren.storm.context.Context;
-import com.ljunggren.storm.utils.ExceptionUtils;
+import com.ljunggren.storm.util.ExceptionUtils;
 
 public class InsertQuery extends QueryChain {
     

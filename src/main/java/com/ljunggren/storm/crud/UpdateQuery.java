@@ -12,7 +12,7 @@ import com.ljunggren.storm.annotation.crud.Update;
 import com.ljunggren.storm.builders.QueryBuilder;
 import com.ljunggren.storm.builders.UpdateQueryBuilder;
 import com.ljunggren.storm.context.Context;
-import com.ljunggren.storm.utils.ExceptionUtils;
+import com.ljunggren.storm.util.ExceptionUtils;
 
 public class UpdateQuery extends QueryChain {
     

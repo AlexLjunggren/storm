@@ -10,8 +10,15 @@ Context
         "name" : "H2",
         "driver" : "org.h2.Driver",
         "url" : "jdbc:h2:mem:test;DB_CLOSE_DELAY=-1",
-        "username" : "",
-        "password" : ""
+        "username" : "****",
+        "password" : "****"
+    },
+    {
+        "name" : "ORACLE",
+        "driver" : "oracle.jdbc.driver.OracleDriver",
+        "url" : "jdbc:oracle:thin:@server:port:SID",
+        "username" : "****",
+        "password" : "****"
     }
 ]
 ```
@@ -28,8 +35,8 @@ private interface UserRepository {
     @Delete(sql = "delete from users where id = #{id}")
     public int delete(int id);
         
-	@Insert(sql = "insert into users (firstname, lastname, employee_id) values (#{firstname}, #{lastname}, #{employeeID})")
-	public int insert(@Param("firstname") String first, @Param("lastname") String last, @Param("employeeID") int id);
+    @Insert(sql = "insert into users (firstname, lastname, employee_id) values (#{firstname}, #{lastname}, #{employeeID})")
+    public int insert(@Param("firstname") String first, @Param("lastname") String last, @Param("employeeID") int id);
 }
 ```
 

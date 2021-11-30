@@ -1,4 +1,4 @@
-package com.ljunggren.storm.utils;
+package com.ljunggren.storm.util;
 
 import static org.junit.Assert.assertEquals;
 
@@ -33,7 +33,7 @@ public class ParameterUtilsTest {
 
     @Test
     public void findParameterIdsTest() {
-        String sql = "select * from users where id = #{id} and active = #{active}";
+        String sql = "select * from users whesre id = #{id} and active = #{active}";
         List<String> parameterIds = ParameterUtils.findParameterIds(sql);
         assertEquals(2, parameterIds.size());
         assertEquals("id", parameterIds.get(0));
