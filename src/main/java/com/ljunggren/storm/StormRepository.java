@@ -46,11 +46,11 @@ public class StormRepository implements InvocationHandler {
         return createContext(database);
     }
     
-    private Context createContext(Database connection) {
-        if (connection == null) {
+    private Context createContext(Database database) {
+        if (database == null) {
             return null;
         }
-        String name = connection.value();
+        String name = database.value();
         return new ContextFactory().getContext(name);
     }
 
