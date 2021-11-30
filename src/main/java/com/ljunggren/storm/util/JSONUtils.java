@@ -1,4 +1,4 @@
-package com.ljunggren.storm.utils;
+package com.ljunggren.storm.util;
 
 import java.io.IOException;
 import java.util.List;

@@ -18,10 +18,11 @@ import com.ljunggren.storm.Peek;
 import com.ljunggren.storm.StormRepository;
 import com.ljunggren.storm.TestUser;
 import com.ljunggren.storm.annotation.Database;
+import com.ljunggren.storm.annotation.Param;
 import com.ljunggren.storm.annotation.crud.Select;
 import com.ljunggren.storm.context.Context;
 import com.ljunggren.storm.context.ContextFactory;
-import com.ljunggren.storm.exceptions.StormException;
+import com.ljunggren.storm.exception.StormException;
 
 public class SelectQueryTest {
 
@@ -34,17 +35,17 @@ public class SelectQueryTest {
         @Select(sql = "select * from users order by id")
         public TestUser[] fetchAllOrdered(Paging paging);
         
-        @Select(sql = "select * from users where lastname = ?")
-        public List<TestUser> findByLastName(String lastName, Paging paging);
+        @Select(sql = "select * from users where lastname = #{lastname}")
+        public List<TestUser> findByLastName(@Param("lastname") String lastname, Paging paging);
         
-        @Select(sql = "select * from users where lastname = ?")
-        public List<TestUser> findByLastName(Paging paging, String lastName);
+        @Select(sql = "select * from users where lastname = #{lastname}")
+        public List<TestUser> findByLastName(Paging paging, @Param("lastname") String lastname);
         
-        @Select(sql = "select * from users where id = ?")
+        @Select(sql = "select * from users where id = #{id}")
         public TestUser findById(int id);
         
-        @Select(sql = "select * from users where firstname = ? and lastname = ?")
-        public TestUser findByFirstAndLastName(String firstName, String lastName);
+        @Select(sql = "select * from users where firstname = #{firstname} and lastname = #{lastname}")
+        public TestUser findByFirstAndLastName(@Param("firstname") String firstname, @Param("lastname") String lastname);
         
         @Select(sql = "select count(*) from users")
         public long count();

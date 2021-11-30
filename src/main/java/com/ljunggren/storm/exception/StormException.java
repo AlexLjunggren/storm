@@ -1,4 +1,4 @@
-package com.ljunggren.storm.exceptions;
+package com.ljunggren.storm.exception;
 
 public class StormException extends RuntimeException {
 

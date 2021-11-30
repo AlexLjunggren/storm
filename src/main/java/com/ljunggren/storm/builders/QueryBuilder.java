@@ -8,12 +8,12 @@ import java.util.stream.Collectors;
 import com.ljunggren.reflectionUtils.ReflectionUtils;
 import com.ljunggren.storm.annotation.entity.ColumnProperty;
 import com.ljunggren.storm.annotation.entity.Table;
-import com.ljunggren.storm.utils.AnnotationUtils;
+import com.ljunggren.storm.util.AnnotationUtils;
 
 public abstract class QueryBuilder {
 
     public abstract String buildSQL();
-    public abstract Object[] getArgs() throws IllegalAccessException ;
+    public abstract Object[] getArgs() throws IllegalAccessException;
     
     protected String getTableName(Class<?> clazz) {
         Table table = AnnotationUtils.getAnnotationFromClass(Table.class, clazz);

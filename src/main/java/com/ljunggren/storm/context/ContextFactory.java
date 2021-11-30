@@ -7,8 +7,8 @@ import java.util.List;
 import org.apache.commons.io.IOUtils;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.ljunggren.storm.exceptions.ContextException;
-import com.ljunggren.storm.utils.JSONUtils;
+import com.ljunggren.storm.exception.ContextException;
+import com.ljunggren.storm.util.JSONUtils;
 
 public class ContextFactory {
     

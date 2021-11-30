@@ -12,7 +12,7 @@ import org.apache.commons.lang3.reflect.FieldUtils;
 
 import com.ljunggren.reflectionUtils.ReflectionUtils;
 import com.ljunggren.storm.annotation.entity.ColumnProperty;
-import com.ljunggren.storm.utils.AnnotationUtils;
+import com.ljunggren.storm.util.AnnotationUtils;
 
 public abstract class MapperChain {
 

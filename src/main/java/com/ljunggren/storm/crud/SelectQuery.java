@@ -1,6 +1,7 @@
 package com.ljunggren.storm.crud;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Parameter;
 import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.function.Consumer;
@@ -18,29 +19,31 @@ public class SelectQuery extends QueryChain {
     }
 
     @Override
-    public Object execute(Annotation annotation, Context context, Object[] args, Type returnType) throws Exception {
+    public Object execute(Annotation annotation, Context context, Parameter[] parameters, Object[] arguments, Type returnType) throws Exception {
         if (annotation.annotationType() == Select.class) {
             String sql = ((Select) annotation).sql();
-            Paging paging = findPaging(args);
-            return paging == null ? executeQuery(sql, context, args, returnType) : executePagedQuery(sql, context, args, returnType, paging);
+            Paging paging = findPaging(arguments);
+            return paging == null ? executeQuery(sql, context, parameters, arguments, returnType) : 
+                    executePagedQuery(sql, context, parameters, arguments, returnType, paging);
         }
-        return nextChain.execute(annotation, context, args, returnType);
+        return nextChain.execute(annotation, context, parameters, arguments, returnType);
     }
     
-    private Paging findPaging(Object[] args) {
-        if (args == null) {
+    private Paging findPaging(Object[] arguments) {
+        if (arguments == null) {
             return null;
         }
-        return (Paging) Arrays.stream(args).filter(arg -> arg.getClass() == Paging.class)
+        return (Paging) Arrays.stream(arguments).filter(argument -> argument.getClass() == Paging.class)
                 .findFirst()
                 .orElse(null);
     }
     
-    private Object executePagedQuery(String sql, Context context, Object[] args, Type returnType, Paging paging) throws Exception {
-        QueryBuilder queryBuilder = new PagingQueryBuilder(sql, args, paging);
+    private Object executePagedQuery(String sql, Context context, Parameter[] parameters, Object[] arguments, Type returnType, Paging paging) throws Exception {
+        parameters = Arrays.stream(parameters).filter(parameter -> parameter.getType() != Paging.class).toArray(Parameter[]::new);
+        arguments = Arrays.stream(arguments).filter(argument -> argument.getClass() != Paging.class).toArray(Object[]::new);
+        QueryBuilder queryBuilder = new PagingQueryBuilder(sql, arguments, paging);
         String pagingSQL = queryBuilder.buildSQL();
-        Object[] generatedArgs = queryBuilder.getArgs();
-        return executeQuery(pagingSQL, context, generatedArgs, returnType);
+        return executeQuery(pagingSQL, context, parameters, arguments, returnType);
     }
     
 }

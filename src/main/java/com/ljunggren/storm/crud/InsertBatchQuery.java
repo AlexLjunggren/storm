@@ -1,6 +1,7 @@
 package com.ljunggren.storm.crud;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Parameter;
 import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.function.Consumer;
@@ -10,7 +11,7 @@ import com.ljunggren.storm.annotation.crud.InsertBatch;
 import com.ljunggren.storm.builders.InsertBatchQueryBuilder;
 import com.ljunggren.storm.builders.QueryBuilder;
 import com.ljunggren.storm.context.Context;
-import com.ljunggren.storm.utils.ExceptionUtils;
+import com.ljunggren.storm.util.ExceptionUtils;
 
 public class InsertBatchQuery extends QueryChain {
 
@@ -19,11 +20,11 @@ public class InsertBatchQuery extends QueryChain {
     }
 
     @Override
-    public Object execute(Annotation annotation, Context context, Object[] args, Type returnType) throws Exception {
+    public Object execute(Annotation annotation, Context context, Parameter[] parameters, Object[] arguments, Type returnType) throws Exception {
         if (annotation.annotationType() == InsertBatch.class) {
-            return executeNonNativeQuery(context, args, returnType);
+            return executeNonNativeQuery(context, arguments, returnType);
         }
-        return nextChain.execute(annotation, context, args, returnType);
+        return nextChain.execute(annotation, context, parameters, arguments, returnType);
     }
 
     private int executeNonNativeQuery(Context context, Object[] args, Type returnType) {

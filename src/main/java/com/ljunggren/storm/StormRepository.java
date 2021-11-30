@@ -3,6 +3,7 @@ package com.ljunggren.storm;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
 import java.lang.reflect.Proxy;
 import java.lang.reflect.Type;
 import java.util.Arrays;
@@ -21,8 +22,8 @@ import com.ljunggren.storm.crud.InsertQuery;
 import com.ljunggren.storm.crud.QueryChain;
 import com.ljunggren.storm.crud.SelectQuery;
 import com.ljunggren.storm.crud.UpdateQuery;
-import com.ljunggren.storm.exceptions.StormException;
-import com.ljunggren.storm.utils.AnnotationUtils;
+import com.ljunggren.storm.exception.StormException;
+import com.ljunggren.storm.util.AnnotationUtils;
 
 public class StormRepository implements InvocationHandler {
     
@@ -61,8 +62,9 @@ public class StormRepository implements InvocationHandler {
         Iterator<Annotation> annotations = Arrays.stream(method.getAnnotations()).iterator();
         Type returnType = method.getGenericReturnType();
         Object[] argsAsArrays = convertCollectionsToArray(args);
+        Parameter[] parameters = method.getParameters();
         try {
-            return execute(annotations, argsAsArrays, returnType);
+            return execute(annotations, parameters, argsAsArrays, returnType);
         } catch (Exception e) {
             throw new StormException(e.getMessage());
         }
@@ -81,10 +83,10 @@ public class StormRepository implements InvocationHandler {
         }).toArray();
     }
     
-    private Object execute(Iterator<Annotation> annotations, Object[] args, Type returnType) throws Exception {
+    private Object execute(Iterator<Annotation> annotations, Parameter[] parameters, Object[] arguments, Type returnType) throws Exception {
         if (annotations.hasNext()) {
-            Object object = getQueryChain().execute(annotations.next(), context, args, returnType);
-            return object == null ? execute(annotations, args, returnType) : object;
+            Object object = getQueryChain().execute(annotations.next(), context, parameters, arguments, returnType);
+            return object == null ? execute(annotations, parameters, arguments, returnType) : object;
         }
         return null;
     }

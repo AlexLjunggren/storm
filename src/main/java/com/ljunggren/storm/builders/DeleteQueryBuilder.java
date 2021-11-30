@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.ljunggren.reflectionUtils.ReflectionUtils;
 import com.ljunggren.storm.annotation.entity.Id;
-import com.ljunggren.storm.utils.AnnotationUtils;
+import com.ljunggren.storm.util.AnnotationUtils;
 
 public class DeleteQueryBuilder extends QueryBuilder {
 

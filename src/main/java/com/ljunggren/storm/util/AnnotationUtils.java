@@ -1,4 +1,4 @@
-package com.ljunggren.storm.utils;
+package com.ljunggren.storm.util;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;

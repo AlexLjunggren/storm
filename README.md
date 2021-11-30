@@ -10,8 +10,15 @@ Context
         "name" : "H2",
         "driver" : "org.h2.Driver",
         "url" : "jdbc:h2:mem:test;DB_CLOSE_DELAY=-1",
-        "username" : "",
-        "password" : ""
+        "username" : "****",
+        "password" : "****"
+    },
+    {
+        "name" : "ORACLE",
+        "driver" : "oracle.jdbc.driver.OracleDriver",
+        "url" : "jdbc:oracle:thin:@server:port:SID",
+        "username" : "****",
+        "password" : "****"
     }
 ]
 ```
@@ -25,9 +32,11 @@ private interface UserRepository {
     @Select(sql = "select * from users")
     public List<User> fetchAll();
         
-    @Delete(sql = "delete from users where id = ?")
+    @Delete(sql = "delete from users where id = #{id}")
     public int delete(int id);
         
+    @Insert(sql = "insert into users (firstname, lastname, employee_id) values (#{firstname}, #{lastname}, #{employeeID})")
+    public int insert(@Param("firstname") String first, @Param("lastname") String last, @Param("employeeID") int id);
 }
 ```
 
@@ -75,7 +84,7 @@ public int delete(User user);
 @Delete
 public int deleteAll(User... users);
         
-@Delete(sql = "delete from users where id = ?")
+@Delete(sql = "delete from users where id = #{id}")
 public int deleteById(int id);
 ```
 
@@ -88,8 +97,8 @@ public int update(User user);
 @Update
 public int updateAll(User... users);
 
-@Update(sql = "update users set firstname = ? where id = ?")
-public int updateFirstName(String name, int id);
+@Update(sql = "update users set firstname = #{firstname} where id = #{id}")
+public int updateFirstName(@Param("firstname") String firstname, @Param("id") int id);
 ```
 
 Insert
@@ -101,8 +110,8 @@ public int insert(User user);
 @Insert
 public int insertAll(User... users);
         
-@Insert(sql = "insert into users (firstname, lastname, employee_id) values (?, ?, ?)")
-public int insert(String firstName, String lastName, int employeeID);
+@Insert(sql = "insert into users (firstname, lastname, employee_id) values (#{firstname}, #{lastname}, #{employeeID})")
+public int insert(@Param("firstname") String first, @Param("lastname") String last, @Param("employeeID") int id);
 ```
 
 Insert Batch
@@ -162,10 +171,10 @@ User[] users = repository.fetchAllOrdered(paging);
 ** Note: ** Paging can be passed in at any point in the argument list
 
 ```java
-@Select(sql = "select * from users where lastname = ?")
-public findByLastName(Paging paging, String lastName);
+@Select(sql = "select * from users where lastname = #{lastname}")
+public findByLastName(Paging paging, @Param("lastname") String lastname);
     // or
-public findByLastName(String lastName, Paging paging);
+public findByLastName(@Param("lastname") String lastname, Paging paging);
 
 ```
 
