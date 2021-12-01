@@ -68,17 +68,12 @@ public abstract class QueryChain {
     protected int executeBatch(String sql, Context context, Object[] argumentArray, Type returnType) throws SQLException {
         Connection connection = null;
         SqlBatchStatement sqlBatchStatement = null;
-//        PreparedStatement preparedStatement = null;
         try {
             connection = context.getConnection();
             sqlBatchStatement = new SqlBatchStatement(connection, sql);
-//            String preparedSql = ParameterUtils.replaceParamaterIdsWithQuestionMarks(sql);
-//            preparedStatement = connection.prepareStatement(preparedSql);
             for (Object arguments: argumentArray) {
-                sqlBatchStatement.addBatch((Object[]) arguments);
                 // TODO: Refactor so args does not have to be cast to array
-//                setParameters(preparedStatement, (Object[]) arguments);
-//                preparedStatement.addBatch();
+                sqlBatchStatement.addBatch((Object[]) arguments);
                 if (peek != null) {
                     peek.accept(sqlBatchStatement.toString());
                 }
@@ -90,14 +85,6 @@ public abstract class QueryChain {
         }
     }
     
-//    private void setParameters(PreparedStatement preparedStatement, Object[] args) throws SQLException {
-//        if (args != null) {
-//            for (int i = 0; i < args.length; i++) {
-//                preparedStatement.setObject(i + 1, args[i]);
-//            }
-//        }
-//    }
-//    
     private void closeConnection(Connection connection) throws SQLException {
         if (connection != null) {
             connection.close();
