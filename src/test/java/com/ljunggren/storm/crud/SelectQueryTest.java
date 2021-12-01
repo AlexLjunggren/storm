@@ -171,7 +171,7 @@ public class SelectQueryTest {
         Consumer<String> peek = e -> setGeneratedSQL(e);
         UserRepository repository = StormRepository.newInstance(UserRepository.class).peek(peek);
         repository.fetchAllOrdered();
-        assertTrue(generatedSQL.contains("select * from users order by id"));
+        assertEquals(generatedSQL, "select * from users order by id");
     }
 
 }

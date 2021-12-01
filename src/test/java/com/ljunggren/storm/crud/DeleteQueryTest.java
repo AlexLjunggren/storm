@@ -104,7 +104,7 @@ public class DeleteQueryTest {
         Consumer<String> peek = e -> setGeneratedSQL(e);
         UserRepository repository = StormRepository.newInstance(UserRepository.class).peek(peek);
         repository.deleteById(1);
-        assertTrue(generatedSQL.contains("delete from users where id = ?"));
+        assertEquals(generatedSQL, "delete from users where id = ? : [1]");
     }
 
 }
