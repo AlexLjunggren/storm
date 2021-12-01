@@ -1,7 +1,6 @@
 package com.ljunggren.storm.crud;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -91,9 +90,8 @@ public class InsertBatchQueryTest {
         repository.peek(peek);
         List<TestUser> users = Arrays.asList(new TestUser[] { getJane(), getGreg() });
         repository.insert(users);
-        String sql = "insert into users (firstName, lastName, employee_id) values (?, ?, ?)";
-        assertTrue(generatedSQLs.get(0).contains(sql));
-        assertTrue(generatedSQLs.get(1).contains(sql));
+        assertEquals(generatedSQLs.get(0), "insert into users (firstName, lastName, employee_id) values (?, ?, ?) : [Jane, Doe, 104]");
+        assertEquals(generatedSQLs.get(1), "insert into users (firstName, lastName, employee_id) values (?, ?, ?) : [Greg, Smith, 105]");
     }
 
 }

@@ -104,7 +104,7 @@ public class InsertQueryTest {
         Consumer<String> peek = e -> setGeneratedSQL(e);
         UserRepository repository = StormRepository.newInstance(UserRepository.class).peek(peek);
         repository.insert("Jane", "Doe", 104);
-        assertTrue(generatedSQL.contains("insert into users (firstname, lastname, employee_id) values (?, ?, ?)"));
+        assertEquals(generatedSQL, "insert into users (firstname, lastname, employee_id) values (?, ?, ?) : [Jane, Doe, 104]");
     }
 
 }

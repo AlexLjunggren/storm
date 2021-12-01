@@ -1,7 +1,6 @@
 package com.ljunggren.storm.crud;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 import java.sql.Statement;
 import java.util.function.Consumer;
@@ -104,7 +103,7 @@ public class UpdateQueryTest {
         Consumer<String> peek = e -> setGeneratedSQL(e);
         UserRepository repository = StormRepository.newInstance(UserRepository.class).peek(peek);
         repository.updateFirstName("Bob", 1);
-        assertTrue(generatedSQL.contains("update users set firstname = ? where id = ?"));
+        assertEquals(generatedSQL, "update users set firstname = ? where id = ? : [Bob, 1]");
     }
 
 }
