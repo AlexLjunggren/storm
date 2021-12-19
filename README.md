@@ -185,3 +185,4 @@ public findByLastName(@Param("lastname") String lastname, Paging paging);
 ## Dependencies ##
 
 - reflection-utils
+- json-utils
