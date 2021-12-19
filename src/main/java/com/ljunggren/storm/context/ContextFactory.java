@@ -7,8 +7,8 @@ import java.util.List;
 import org.apache.commons.io.IOUtils;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.ljunggren.jsonUtils.JsonUtils;
 import com.ljunggren.storm.exception.ContextException;
-import com.ljunggren.storm.util.JSONUtils;
 
 public class ContextFactory {
     
@@ -46,7 +46,7 @@ public class ContextFactory {
     
     private List<Context> parseContextFile(String json) {
         try {
-            return JSONUtils.jsonToListObject(json, Context.class);
+            return JsonUtils.jsonToList(json, Context.class);
         } catch (JsonProcessingException e) {
             throw new ContextException(String.format("Unable to parse context.json", definition));
         }
