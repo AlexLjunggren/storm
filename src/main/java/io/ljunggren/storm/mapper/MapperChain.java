@@ -32,14 +32,14 @@ public abstract class MapperChain {
         return (Class<?>) type;
     }
     
-    protected Object instantiateObject(Class<?> clazz) throws InstantiationException, IllegalAccessException {
+    protected Object instantiateObject(Class<?> clazz) throws Exception {
         if (ReflectionUtils.hasNoArgsContrustor(clazz)) {
-            return clazz.newInstance();
+            return clazz.getDeclaredConstructor().newInstance();
         }
         return null;
     }
     
-    protected Object mapToObject(ResultSet resultSet, Class<?> clazz, List<Field> fields) throws SQLException, IllegalAccessException, InstantiationException {
+    protected Object mapToObject(ResultSet resultSet, Class<?> clazz, List<Field> fields) throws Exception {
         if (ReflectionUtils.isPrimitive(clazz) || ReflectionUtils.isString(clazz) || ReflectionUtils.isNumber(clazz)) {
             return mapToPrimitive(resultSet);
         }
